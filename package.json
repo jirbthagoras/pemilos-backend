@@ -1,0 +1,31 @@
+{
+  "name": "pemilos-backend",
+  "version": "1.0.0",
+  "description": "Backend Application for SMKN8Semarang Pemilos Event",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dist/index.js",
+    "dev": "nodemon src/index.ts",
+    "build": "npx tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jirbthagoras/pemilos-backend.git"
+  },
+  "author": "jirbthagoras",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jirbthagoras/pemilos-backend/issues"
+  },
+  "homepage": "https://github.com/jirbthagoras/pemilos-backend#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "nodemon": "^3.1.10",
+    "typescript": "^5.8.3"
+  }
+}

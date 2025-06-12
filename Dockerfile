@@ -20,8 +20,6 @@ COPY --from=builder ./build/node_modules ./node_modules
 
 RUN apk add --update nodejs npm
 
-RUN npm install
-
 EXPOSE 5000
 
 CMD ["npm", "run", "start"]

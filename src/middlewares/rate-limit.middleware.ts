@@ -6,18 +6,17 @@ const WINDOW_SIZE_IN_SECONDS = 60
 const MAX_REQUESTS = 5
 
 // This sliding window algorithm utilize, Redis' ZSET (Sorted set)
-// To organize the request history. 
-
+// To organize the request history.
 export const rateLimitMiddleware = async (req: Request, res: Response, next: NextFunction) => {
      // Create redis client first
      const redis = await getRedisClient()
 
-     // Init some vars like ip,  
+     // Init some vars like ip, key name format, and the now.
      const userIp = req.ip || 'global'
      const key = `rate-limit:${userIp}`
      const now = Date.now()
 
-     // delete sets that're older than now
+     // delete sets that're older than 60 ago
      await redis.zRemRangeByScore(key, 0, now - WINDOW_SIZE_IN_SECONDS * 1000)
 
      // Count all the requests inside the ZSET

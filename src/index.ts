@@ -13,7 +13,10 @@ dotenv.config()
 app.use(rateLimitMiddleware)
 
 app.get('/', (req, res) => {
-  res.send('Hello, TypeScript Node Express!');
+  res.status(200).json({
+    "status": "success",
+    "message": "This is the /"
+  })
 });
 
 // Attach the error handler, so that all thrown error can be catch and returned to user.

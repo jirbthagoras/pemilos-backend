@@ -1,6 +1,6 @@
-FROM node:slim AS builder
+FROM node:alpine AS builder
 
-WORKDIR /app
+WORKDIR /build
 
 COPY package*.json ./
 
@@ -10,14 +10,17 @@ COPY . .
 
 RUN npm run build
 
-FROM node:slim
+FROM alpine:latest
 
-WORKDIR /build
+WORKDIR /app
 
 COPY package*.json ./
-COPY --from=builder ./app/dist ./dist
+COPY --from=builder ./build/dist ./dist
+COPY --from=builder ./build/node_modules ./node_modules
 
-RUN npm install --omit=dev
+RUN apk add --update nodejs npm
+
+RUN npm install
 
 EXPOSE 5000
 

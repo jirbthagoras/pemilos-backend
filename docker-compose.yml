@@ -23,7 +23,26 @@ services:
     ports:
       - "6379:6379"
     networks:
-      - pemilos-network
+      - pemilos_network
+
+  mongo_db:
+    image: mongo:7.0-alpine
+    volumes: 
+       - pemilos_mongo:/data/db
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+    env_file:
+      - .env
+    ports:
+      - '27017:27017'
+    networks:
+      - pemilos_network
 
 networks:
-  pemilos-network:
+  pemilos_network:
+
+volumes:
+  pemilos_mongo:

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { verifyToken } from "../utils/jwt.utils";
-import {AppError, createError} from "../exceptions/error.exceptions";
+import { verifyToken } from "../utils/jwt.util";
+import {AppError, createError} from "../exceptions/error.exception";
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const token: string | undefined = req.headers.authorization?.split(' ')[1];

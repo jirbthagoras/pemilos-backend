@@ -1,5 +1,5 @@
 import { createClient } from "redis";
-import { logger } from "../utils/logger.utils";
+import { logger } from "../utils/logger.util";
 
 const USERNAME = String(process.env.REDIS_USERNAME);
 const PASSWORD = String(process.env.REDIS_PASSWORD);

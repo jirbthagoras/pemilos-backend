@@ -1,5 +1,7 @@
 DOCKER_COMPOSE = docker compose
 
+# Makefile increases dev experience for continous development!
+
 # Default target
 .PHONY: help
 help:

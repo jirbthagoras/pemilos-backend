@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { getRedisClient } from "../config/redis.config";
-import { createError } from "../exceptions/error.exceptions";
+import { createError } from "../exceptions/error.exception";
 
 const WINDOW_SIZE_IN_SECONDS = 60
 const MAX_REQUESTS = 5

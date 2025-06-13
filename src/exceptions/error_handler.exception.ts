@@ -1,6 +1,6 @@
-import {AppError, isAppError} from "./error.exceptions";
+import {AppError, isAppError} from "./error.exception";
 import {Request, Response, NextFunction} from "express";
-import { logger } from "../utils/logger.utils";
+import { logger } from "../utils/logger.util";
 
 export const errorHandler = (err: AppError, _: Request, res: Response, __: NextFunction) => {
 

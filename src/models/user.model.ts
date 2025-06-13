@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { LABEL } from "../utils/variables.util";
 const { Schema, model } = mongoose;
 
 /* 
@@ -41,7 +42,7 @@ const userSchema = new Schema({
      role: {
           type: String,
           required: true,
-          enum: ["voter", "admin"]
+          enum: LABEL
      },
      // Class, if the user is staff or teacher, just write so.
      class: {
@@ -55,4 +56,5 @@ const userSchema = new Schema({
      }
 })
 
+// Yes, here we exports the user cuz this is the component we'll be using in the logic.
 export const User = model("User", userSchema);

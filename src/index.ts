@@ -9,7 +9,7 @@ const port = 5000;
 
 dotenv.config()
 
-// Attach rate limiting cuz y not
+// Attach rate limiter middleware, ensure it works
 app.use(rateLimitMiddleware)
 
 app.get('/', (req, res) => {

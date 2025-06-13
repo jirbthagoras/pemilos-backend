@@ -1,11 +1,14 @@
 import { Request } from "express"
 import jwt, { Jwt } from "jsonwebtoken"
 import { createError } from "../exceptions/error.exception"
+import { string } from "zod"
 
 const JWT_KEY: string = String(process.env.JWT_KEY)
 
 export const generateToken = (userId: number) => {
-     return jwt.sign({} ,JWT_KEY, {
+     return jwt.sign({
+          id: String(userId)
+     }, JWT_KEY, {
           subject: String(userId),
           expiresIn: "15m"
      })

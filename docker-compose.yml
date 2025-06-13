@@ -2,18 +2,23 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./producer/Dockerfile.producer
     ports:
       - "5000:5000"
     environment:
+      - APP_PORT=${APP_PORT}
       - REDIS_USERNAME=${REDIS_USERNAME}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_HOST=${MONGO_HOST}
+      - MONGO_PORT=${MONGO_PORT}
     env_file:
       - .env
     networks:
-      - pemilos-network
+      - pemilos_network
 
   redis:
     image: redis:7-alpine
@@ -26,14 +31,14 @@ services:
       - pemilos_network
 
   mongo_db:
-    image: mongo:7.0-alpine
+    image: bitnami/mongodb
     volumes: 
        - pemilos_mongo:/data/db
     restart: always
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
-      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+      - MONGODB_ROOT_USER=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGODB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGODB_DATABASE=${MONGODB_DATABASE}
     env_file:
       - .env
     ports:

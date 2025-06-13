@@ -2,23 +2,23 @@ FROM node:alpine AS builder
 
 WORKDIR /build
 
-COPY package*.json ./
+COPY ./producer/package*.json ./
 
 RUN npm install
 
-COPY . .
+COPY ./producer ./
 
 RUN npm run build
 
-FROM alpine:latest
+FROM node:alpine
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY --from=builder ./build/package*.json ./
 COPY --from=builder ./build/dist ./dist
 COPY --from=builder ./build/node_modules ./node_modules
 
-RUN apk add --update nodejs npm
+# RUN apk add --update nodejs npm
 
 EXPOSE 5000
 

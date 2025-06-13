@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { LABEL } from "../utils/variables.util";
+import { LABEL } from "./utils/variables.util";
 const { Schema, model } = mongoose;
 
 /* 

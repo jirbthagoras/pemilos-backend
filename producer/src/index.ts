@@ -9,15 +9,16 @@ dotenv.config()
 const app = express()
 const port = String(process.env.APP_PORT);
 
-// connect to mongodb
-
 // Attach rate limiter middleware, ensure it works
 app.use(rateLimitMiddleware)
+
+// Attach json
+app.use(express.json());
 
 app.get('/', (req, res) => {
   res.status(200).json({
     "status": "success",
-    "message": "This is the /"
+    "message": "This is the / route"
   })
 });
 
@@ -25,8 +26,10 @@ app.get('/', (req, res) => {
 app.use(errorHandler)
 
 async function bootstrap() {
+  // connects to MongoDB
   await connect();
-  app.listen(3000, () => console.log("Server started on http://localhost:3000"));
+  // listens
+  app.listen(port, () => console.log("Server started on port 3000"));
 }
 
 bootstrap()

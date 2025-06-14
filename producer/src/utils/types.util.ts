@@ -1,20 +1,27 @@
 import { NextFunction, Request } from "express";
 
-export interface Voter {
+// Vote interface, to parse the .csv
+export type Voter = {
   name: string;
   username: string;
   class: string;
 }
 
-export type Middleware = {
+// A handler yield by middleware.
+export type MiddlewareHandler = {
   req: Request,
   res: Response,
   next: NextFunction
 }
 
-// Here we define a JWT Payload, because this is typescript.
-export type Payload  = {
-  subject: string,
-  role: "voter" | "admin"
+// A handler yield by Controller, maaf namanya gajelas, aku kehabisan ide.
+export type RequestHandler = {
+  req: Request,
+  res: Response
 }
 
+// Here we define a JWT Payload, because this is typescript.
+export type Payload  = {
+  id: string,
+  role: "voter" | "admin"
+}

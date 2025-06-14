@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 import { verifyToken } from "../utils/jwt.util";
 import {createError} from "../exceptions/error.exception";
+import { MiddlewareHandler } from '../utils/types.util';
 
-export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    const token: string | undefined = req.headers.authorization?.split(' ')[1];
+export const authMiddleware = (handler: MiddlewareHandler) => {
+    const token: string | undefined = handler.req.headers.authorization?.split(' ')[1];
     if (!token) {
         throw createError(
             "Unauthorized",
@@ -20,5 +21,5 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
         );
     }
 
-    next()
+    handler.next()
 }

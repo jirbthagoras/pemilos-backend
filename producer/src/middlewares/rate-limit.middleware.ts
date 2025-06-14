@@ -1,18 +1,19 @@
 import { NextFunction, Request, Response } from "express";
 import { getRedisClient } from "../config/redis.config";
 import { createError } from "../exceptions/error.exception";
+import { MiddlewareHandler } from "../utils/types.util";
 
 const WINDOW_SIZE_IN_SECONDS = 60
 const MAX_REQUESTS = 5
 
 // This sliding window algorithm utilize, Redis' ZSET (Sorted set)
 // To organize the request history.
-export const rateLimitMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+export const rateLimitMiddleware = async (handler: MiddlewareHandler) => {
      // Create redis client first
      const redis = await getRedisClient()
 
      // Init some vars like ip, key name format, and the now.
-     const userIp = req.ip || 'global'
+     const userIp = handler.req.ip || 'global'
      const key = `rate-limit:${userIp}`
      const now = Date.now()
 
@@ -37,5 +38,5 @@ export const rateLimitMiddleware = async (req: Request, res: Response, next: Nex
      // Expire the sets, so that the rate limiter remain clear.
      await redis.expire(key, WINDOW_SIZE_IN_SECONDS)
 
-     next()
+     handler.next()
 }

@@ -12,7 +12,7 @@ const MAX_REQUESTS = 5
 export const rateLimitMiddleware: MiddlewareHandler = async (req, res, next) => {
      
      // Create redis client first
-     const redis = await getRedisClient()
+     const redis = getRedisClient()
 
      // Init some vars like ip, key name format, and the now.
      const userIp = req.ip || 'global'
@@ -20,10 +20,10 @@ export const rateLimitMiddleware: MiddlewareHandler = async (req, res, next) => 
      const now = Date.now()
 
      // delete sets that're older than 60 ago
-     await redis.zRemRangeByScore(key, 0, now - WINDOW_SIZE_IN_SECONDS * 1000)
+     await redis.zremrangebyscore(key, 0, now - WINDOW_SIZE_IN_SECONDS * 1000)
 
      // Count all the requests inside the ZSET
-     const reqCount = await redis.zCard(key)
+     const reqCount = await redis.zcard(key)
 
      // Throw the error if the request count inside the sorted sets is reached limit
      if (reqCount >= MAX_REQUESTS) {
@@ -31,12 +31,7 @@ export const rateLimitMiddleware: MiddlewareHandler = async (req, res, next) => 
      }
 
      // If it passed, just add more score inside the sets.
-     await redis.zAdd(key, [
-          {
-               score: now,
-               value: now.toString()
-          }
-     ])
+     await redis.zadd(key, now, now.toString())
      // Expire the sets, so that the rate limiter remain clear.
      await redis.expire(key, WINDOW_SIZE_IN_SECONDS)
 

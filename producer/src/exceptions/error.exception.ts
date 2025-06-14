@@ -15,6 +15,6 @@ export const isAppError = (error: any): error is AppError => {
     );
 };
 
-export const createError = (status: string, message: string, statusCode: number, error?: object): AppError => {
+export const createError = (status: string, message: string, statusCode: number, error?: any): AppError => {
     return { status, message, error, statusCode, };
 };

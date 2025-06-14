@@ -1,6 +1,5 @@
-import { createClient } from "redis";
-import { logger } from "../utils/logger.util";
 import Redis from "ioredis";
+import { logger } from "../utils/logger.util";
 
 export const getRedisClient = () => {
   const USERNAME = process.env.REDIS_USERNAME;
@@ -9,6 +8,8 @@ export const getRedisClient = () => {
   const HOST = process.env.REDIS_HOST;
 
   const url = `redis://${USERNAME}:${PASSWORD}@${HOST}:${PORT}`;
+
+  logger.info("Connected to redis")
 
   return new Redis(url)
 }

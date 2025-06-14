@@ -1,21 +1,27 @@
-import mongoose from "mongoose";
-import { Voter } from "../utils/types.util";
-import { User } from "../models/user.model";
-import { execWithTransaction } from "../utils/transaction.util";
-import { logger } from "../utils/logger.util";
+     import mongoose from "mongoose";
+     import { Voter } from "../utils/types.util";
+     import { User } from "../models/user.model";
+     import { execWithTransaction } from "../utils/transaction.util";
+     import { logger } from "../utils/logger.util";
+     import { createError } from "../exceptions/error.exception";
 
-// receive one or more user, and then input it to database.
-export const saveManyVoters = async (
-     voters: Voter[]
-) => {
-     try {
-          await User.insertMany(
-                    voters,
-                    {
-                         ordered: true,
-                    }
+     // receive one or more user, and then input it to database.
+     export const saveManyVoters = async (
+          voters: Voter[]
+     ) => {
+          try {
+               await User.insertMany(
+                         voters,
+                         {
+                              ordered: true,
+                         }
                );
-     } catch (err) {
-          throw err
+          } catch (err) {
+               throw createError(
+                    "failed",
+                    "failed to insert the data",
+                    400,
+                    err
+               )
+          }
      }
-}

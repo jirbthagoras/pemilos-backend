@@ -22,7 +22,7 @@ export const execWithTransaction = async(
                await func(session);
           });
      } finally {
-          // Don't forget to end session! terpaksa make finally karena di TS ndak ada defer.
+          // Don't forget to end session! terpaksa make finally karena di TS ndak ada defer.g
           session.endSession()
      }
 }

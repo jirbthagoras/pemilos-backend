@@ -42,7 +42,8 @@ const userSchema = new Schema({
      role: {
           type: String,
           required: true,
-          enum: LABEL
+          enum: LABEL,
+          default: "voter"
      },
      // Class, if the user is staff or teacher, just write so.
      class: {

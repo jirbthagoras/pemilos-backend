@@ -2,15 +2,18 @@ import { Request } from "express"
 import jwt, { Jwt } from "jsonwebtoken"
 import { createError } from "../exceptions/error.exception"
 import { string } from "zod"
+import { Payload } from "./types.util"
 
 const JWT_KEY: string = String(process.env.JWT_KEY)
 
-export const generateToken = (userId: number) => {
+export const generateToken = (userId: number, role: string) => {
      return jwt.sign({
-          id: String(userId)
+          role: String(userId),
+          id: String(role)
      }, JWT_KEY, {
-          subject: String(userId),
-          expiresIn: "15m"
+          expiresIn: "15m",
+          issuer: "pemilos-backend",
+          notBefore: Date.now()
      })
 }
 
@@ -22,7 +25,7 @@ export const verifyToken = (token: string) => {
      }
 }
 
-export const getSubjectFromToken = (req: Request) => {
+export const getPayload = (req: Request) => {
      const token: string | undefined = req.headers.authorization?.split(' ')[1];
      if (!token) {
           throw createError(
@@ -32,7 +35,7 @@ export const getSubjectFromToken = (req: Request) => {
           )
      }
 
-     const decoded = jwt.decode(token) as jwt.JwtPayload
+     const decoded = jwt.verify(token, JWT_KEY) as jwt.JwtPayload
      if (!decoded.sub) {
           throw createError(
                "failed",
@@ -41,5 +44,5 @@ export const getSubjectFromToken = (req: Request) => {
           )
      }
 
-     return decoded.sub
+     return decoded as Payload
 }

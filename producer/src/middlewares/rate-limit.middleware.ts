@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { getRedisClient } from "../config/redis.config";
+import { getRedisClient } from "../configs/redis.config";
 import { createError } from "../exceptions/error.exception";
 import { MiddlewareHandler } from "../utils/types.util";
 

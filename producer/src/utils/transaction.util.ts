@@ -1,4 +1,5 @@
 import mongoose, {ClientSession} from "mongoose";
+import { createError } from "../exceptions/error.exception";
 
 /* 
 
@@ -7,7 +8,7 @@ that can be used by many of services later.
 
 */
 
-export const execWithTransaction = async(
+export const execWithTransaction = async (
      // First, we define a parameter (which is a service that'll be executed inside)
      func: (session: ClientSession) => Promise<void>
 ) => {
@@ -21,8 +22,10 @@ export const execWithTransaction = async(
           await session.withTransaction(async () => {
                await func(session);
           });
+     } catch (error) {
+          throw error
      } finally {
-          // Don't forget to end session! terpaksa make finally karena di TS ndak ada defer.g
+          // Don't forget to end session! terpaksa make finally karena di TS ndak ada defer.
           session.endSession()
      }
 }

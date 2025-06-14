@@ -1,10 +1,11 @@
-import { NextFunction, Request } from "express";
+import { NextFunction, Request, Response } from "express";
 
 // Vote interface, to parse the .csv
 export type Voter = {
   name: string;
   username: string;
   class: string;
+  password: string;
 }
 
 // A handler yield by middleware.

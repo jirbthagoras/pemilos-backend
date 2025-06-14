@@ -1,6 +1,6 @@
 import {AppError, isAppError} from "./error.exception";
 import {Request, Response, NextFunction} from "express";
-import { logger } from "../models/utils/logger.util";
+import { logger } from "../utils/logger.util";
 
 export const errorHandler = (err: AppError, _: Request, res: Response, __: NextFunction) => {
 

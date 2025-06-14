@@ -14,8 +14,9 @@ export const connect = async () => {
      try {
           await mongoose.connect(uri)
           logger.info("Connected to db")
+          return
      } catch (err) {
           logger.error("Failed to connect to mongo")
-          
+          return 
      }
 }

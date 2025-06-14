@@ -2,7 +2,7 @@ import express from "express";
 import { errorHandler } from "./exceptions/error_handler.exception";
 import dotenv from "dotenv"
 import { rateLimitMiddleware } from "./middlewares/rate-limit.middleware";
-import { connect } from "./config/db.config";
+import { connect } from "./configs/db.config";
 import { adminMiddleware } from "./middlewares/admin.middleware";
 
 dotenv.config()

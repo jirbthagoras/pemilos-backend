@@ -1,6 +1,4 @@
 import mongoose, {ClientSession} from "mongoose";
-import { createError } from "../exceptions/error.exception";
-
 /* 
 
 And then this is the MongoDB Session system, I want to create a reusable function
@@ -19,8 +17,8 @@ export const execWithTransaction = async (
           // withTransaction() wraps function with fault-tolerancy.
           // If the query or exec success, it will commits the transaction.
           // If there is something wrong, just rollback to previous state.
-          await session.withTransaction(async () => {
-               await func(session);
+          return await session.withTransaction(async () => {
+               return await func(session);
           });
      } catch (error) {
           throw error

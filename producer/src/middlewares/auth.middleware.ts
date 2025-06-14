@@ -3,8 +3,8 @@ import { verifyToken } from "../utils/jwt.util";
 import {createError} from "../exceptions/error.exception";
 import { MiddlewareHandler } from '../utils/types.util';
 
-export const authMiddleware = (handler: MiddlewareHandler) => {
-    const token: string | undefined = handler.req.headers.authorization?.split(' ')[1];
+export const authMiddleware: MiddlewareHandler = (req, res, next) => {
+    const token: string | undefined = req.headers.authorization?.split(' ')[1];
     if (!token) {
         throw createError(
             "Unauthorized",
@@ -21,5 +21,5 @@ export const authMiddleware = (handler: MiddlewareHandler) => {
         );
     }
 
-    handler.next()
+    next()
 }

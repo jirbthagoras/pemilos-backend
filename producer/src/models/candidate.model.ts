@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { LABEL } from "./utils/variables.util";
+import { LABEL } from "../utils/variables.util";
 
 const candidateSchema = new Schema({
      name: {

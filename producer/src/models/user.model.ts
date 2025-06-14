@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { LABEL } from "./utils/variables.util";
+import { LABEL } from "../utils/variables.util";
 const { Schema, model } = mongoose;
 
 /* 
@@ -42,7 +42,7 @@ const userSchema = new Schema({
      role: {
           type: String,
           required: true,
-          enum: LABEL,
+          enum: ["voter", "admin"],
           default: "voter"
      },
      // Class, if the user is staff or teacher, just write so.

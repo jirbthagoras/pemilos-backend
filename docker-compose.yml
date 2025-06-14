@@ -15,6 +15,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
       - MONGO_HOST=${MONGO_HOST}
       - MONGO_PORT=${MONGO_PORT}
+      - JWT_KEY=${JWT_KEY}
     env_file:
       - .env
     networks:

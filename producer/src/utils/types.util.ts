@@ -9,17 +9,17 @@ export type Voter = {
 }
 
 // A handler yield by middleware.
-export type MiddlewareHandler = {
+export type MiddlewareHandler = (
   req: Request,
   res: Response,
   next: NextFunction
-}
+) => Promise<void> | void;
 
 // A handler yield by Controller, maaf namanya gajelas, aku kehabisan ide.
-export type RequestHandler = {
+export type ControllerHandler = (
   req: Request,
   res: Response
-}
+) => Promise<void> | void;
 
 // Here we define a JWT Payload, because this is typescript.
 export type Payload  = {

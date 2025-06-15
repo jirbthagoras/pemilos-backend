@@ -24,5 +24,5 @@ export type ControllerHandler = (
 // Here we define a JWT Payload, because this is typescript.
 export type Payload  = {
   id: string,
-  role: "voter" | "admin"
+  role: "voter" | "admin" | "super-admin"
 }

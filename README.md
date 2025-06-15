@@ -1,0 +1,5 @@
+Chill, this clowny repo is just my small project to learn some new technologies like TypeScript, ExpressJS, MongoDB, Docker, and maybe Kafka or some Observability techs like OTel and Grafana (y not Jaeger? Cuz I do not need a tracer for now, just custom Metrics).
+
+So here, i simulated if my webservice will be attacked by 1000++ concurrent user, and that's why i'm using Kafka for data streaming, then redis for caching, Distributed Lock system (to prevent rece condition), and Rate limiting with Sliding Window algorithm (seseorang tidak akan jatuh ke lubang yang sam ahh moment). And for MongoDB... it's just better than some SQL langs. Last but not least, Docker so that my team cannot say "di local jalan kok", i also used docker compose for managing the infra.
+
+So yeah, this is my clowny repo

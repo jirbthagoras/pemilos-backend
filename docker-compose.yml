@@ -17,7 +17,7 @@ services:
       - MONGO_PORT=${MONGO_PORT}
       - JWT_KEY=${JWT_KEY}
     env_file:
-      - .env
+      - .env.prod
     networks:
       - pemilos_network
 
@@ -33,15 +33,15 @@ services:
 
   mongo_db:
     image: bitnami/mongodb
-    volumes: 
+    volumes:
        - pemilos_mongo:/data/db
     restart: always
     environment:
-      - MONGODB_ROOT_USER=${MONGO_INITDB_ROOT_USERNAME}
-      - MONGODB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGODB_ROOT_USER=${MONGODB_ROOT_USER}
+      - MONGODB_ROOT_PASSWORD=${MONGODB_ROOT_PASSWORD}
       - MONGODB_DATABASE=${MONGODB_DATABASE}
     env_file:
-      - .env
+      - .env.prod
     ports:
       - '27017:27017'
     networks:

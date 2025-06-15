@@ -24,7 +24,7 @@ up:
 
 .PHONY: down
 down:
-	@$(DOCKER_COMPOSE) down --volumes --remove-orphans
+	@$(DOCKER_COMPOSE) down --remove-orphans
 
 .PHONY: restart
 restart: down up

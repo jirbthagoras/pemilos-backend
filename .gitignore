@@ -1,4 +1,6 @@
 **/node_modules/
 **/dist/
-.env.prod
+.env
 redis.conf
+mongodb_data/
+pemilos-local/

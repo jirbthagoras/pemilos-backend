@@ -5,9 +5,9 @@ import { Payload } from "./types.util"
 
 const JWT_KEY: string = String(process.env.JWT_KEY)
 
-export const generateToken = (userId: number, role: string) => {
+export const generateToken = (userId: string, role: string) => {
      return jwt.sign({
-          role: String(userId),
+          role: userId,
           id: String(role)
      }, JWT_KEY, {
           expiresIn: "15m",

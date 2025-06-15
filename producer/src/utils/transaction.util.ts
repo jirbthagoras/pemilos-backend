@@ -4,6 +4,8 @@ import mongoose, {ClientSession} from "mongoose";
 And then this is the MongoDB Session system, I want to create a reusable function
 that can be used by many of services later.
 
+CURRENTLY THIS TRANSACTION IS UNUSED CUZ I NEED TO MAKE A MONGODB REPLICA FIRST (AS THEY SAID IN REQUIREMENTS)
+
 */
 
 export const execWithTransaction = async (

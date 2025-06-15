@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 import csv from "csv-parser";
-import { ControllerHandler, Voter } from "../utils/types.util"
+import { Voter } from "../utils/types.util"
 import { createError } from "../exceptions/error.exception";
 import { generatePassword } from "../utils/auth.util";
 import { logger } from "../utils/logger.util";

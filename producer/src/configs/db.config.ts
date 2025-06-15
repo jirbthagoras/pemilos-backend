@@ -1,13 +1,12 @@
 import mongoose from "mongoose"
 import { logger } from "../utils/logger.util"
-import { boolean } from "zod"
 
-export const connect = async () => {
+export const connectToMongoose = async () => {
      const DB_USERNAME = String(process.env.MONGODB_ROOT_USER)
      const DB_PASSWORD = String(process.env.MONGODB_ROOT_PASSWORD)
      const DB_NAME = String(process.env.MONGODB_DATABASE)
-     const DB_HOST = String(process.env.MONGO_HOST)
-     const DB_PORT = String(process.env.MONGO_PORT)
+     const DB_HOST = String(process.env.MONGODB_HOST)
+     const DB_PORT = String(process.env.MONGODB_PORT)
 
      const uri = `mongodb://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`
 
@@ -23,4 +22,9 @@ export const connect = async () => {
           logger.error("Failed to establish a connection to database")
           return false
      }
+}
+
+export const disconnectMongo = async () => {
+     await mongoose.connection.close()
+     logger.info("Mongoose connection closed")
 }

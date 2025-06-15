@@ -8,7 +8,7 @@ export const errorHandler = (err: AppError, _: Request, res: Response, __: NextF
         res.status(err.statusCode || 500).json({
             status: err.status,
             message: err.message,
-            error: err.error
+            error: err?.error
         })
 
         logger.error(`${err.status}, message: ${err.message}`);

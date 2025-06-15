@@ -1,7 +1,6 @@
 import { Request } from "express"
 import jwt, { Jwt } from "jsonwebtoken"
 import { createError } from "../exceptions/error.exception"
-import { string } from "zod"
 import { Payload } from "./types.util"
 
 const JWT_KEY: string = String(process.env.JWT_KEY)

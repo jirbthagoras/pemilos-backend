@@ -15,12 +15,6 @@ export type MiddlewareHandler = (
   next: NextFunction
 ) => Promise<void> | void;
 
-// A handler yield by Controller, maaf namanya gajelas, aku kehabisan ide.
-export type ControllerHandler = (
-  req: Request,
-  res: Response
-) => Promise<void> | void;
-
 // Here we define a JWT Payload, because this is typescript.
 export type Payload  = {
   id: string,

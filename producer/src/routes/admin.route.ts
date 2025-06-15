@@ -1,13 +1,12 @@
 import { Request, Response, Router } from "express";
-// import path from "path"
-import fs from "fs"
 import multer from "multer";
 import { uploadVoterFromCsv } from "../controllers/voter.controller";
+import path from "path";
 
 const router = Router()
 
 const upload = multer({
-     dest: "../../uploads"
+  dest: path.resolve(__dirname, "..", "..", "uploads")
 })
 
 router.post("/upload-csv", upload.single('file'), uploadVoterFromCsv)

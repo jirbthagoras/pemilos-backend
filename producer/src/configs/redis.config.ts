@@ -1,15 +1,29 @@
 import Redis from "ioredis";
 import { logger } from "../utils/logger.util";
 
+let redis: Redis | null = null;
+
 export const getRedisClient = () => {
-  const USERNAME = process.env.REDIS_USERNAME;
-  const PASSWORD = process.env.REDIS_PASSWORD;
-  const PORT = process.env.REDIS_PORT;
-  const HOST = process.env.REDIS_HOST;
 
-  const url = `redis://${USERNAME}:${PASSWORD}@${HOST}:${PORT}`;
+  if (!redis) {
+    const USERNAME = process.env.REDIS_USERNAME;
+    const PASSWORD = process.env.REDIS_PASSWORD;
+    const PORT = process.env.REDIS_PORT;
+    const HOST = process.env.REDIS_HOST;
 
-  logger.info("Connected to redis")
+    const url = `redis://${USERNAME}:${PASSWORD}@${HOST}:${PORT}`;
+    
+    redis = new Redis(url)
+    logger.info("Connected to redis")
+  }
 
-  return new Redis(url)
+  return redis
+}
+
+export const disconnectRedis = async() => {
+  if (redis) {
+    await redis.quit()
+    logger.info("Redis disconnected")
+    redis = null
+  }
 }

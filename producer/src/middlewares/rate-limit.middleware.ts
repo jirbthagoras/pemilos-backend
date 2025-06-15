@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { getRedisClient } from "../configs/redis.config";
 import { createError } from "../exceptions/error.exception";
 import { MiddlewareHandler } from "../utils/types.util";
-import { logger } from "../utils/logger.util";
 
 const WINDOW_SIZE_IN_SECONDS = 60
 const MAX_REQUESTS = 5
@@ -27,7 +26,11 @@ export const rateLimitMiddleware: MiddlewareHandler = async (req, res, next) => 
 
      // Throw the error if the request count inside the sorted sets is reached limit
      if (reqCount >= MAX_REQUESTS) {
-          throw createError("unauthorized", "Request rate reached the limit", 401)
+          res.status(401).json({
+               "status": "unauthorized",
+               "message": "you already reached the request limit"
+          })
+          return
      }
 
      // If it passed, just add more score inside the sets.

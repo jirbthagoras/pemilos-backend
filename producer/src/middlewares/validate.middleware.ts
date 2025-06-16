@@ -4,13 +4,19 @@ import { logger } from "../utils/logger.util";
 
 export const validateDTO = (schema: ObjectSchema) => {
     return (req: Request, res: Response, next: NextFunction) => {
-        const { error } = schema.validate(req.body, { abortEarly: false });
+        const result = schema.validate(req.body, { abortEarly: false });
 
-        if (error) {
+        if (result.error) {
+            const errors = result.error.details.map(detail => ({
+                field: detail.path.join('.'),
+                message: detail.message,
+                type: detail.type,
+                limit: detail.context?.limit
+            }))
             res.status(400).json({
                 status: "error",
                 message: "Failed on validation",
-                error: error.details.map((err) => err.message), // Extract error messages
+                error: errors
             });
             logger.debug("Validation Fails")
             return

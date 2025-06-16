@@ -3,6 +3,7 @@ import { createError } from "../exceptions/error.exception";
 import { asyncHandler } from "../middlewares/async_handler.middleware";
 import { authLogin } from "../services/auth.service";
 import { generateToken } from "../utils/jwt.util";
+import { logger } from "../utils/logger.util";
 
 export const login = asyncHandler(async (req, res) =>  {
      // parse user credentials
@@ -10,7 +11,6 @@ export const login = asyncHandler(async (req, res) =>  {
           username,
           password
      } = req.body;
-
      
 
      // And then here we calls the service
@@ -25,8 +25,9 @@ export const login = asyncHandler(async (req, res) =>  {
 
      if (user.role == "admin") {
           tokenAge = 24 * 60 * 60 * 1000;
-     }  
+     }
 
+     logger.info(`Token age: ${tokenAge}`)
 
      // Creates a JWT token with provided KEY in .env
      const token = generateToken(user._id.toString(), user.role)

@@ -6,8 +6,6 @@ export const adminMiddleware: MiddlewareHandler = async (req, res, next) => {
      // first, decode the payload from request.
      const { role } = getPayload(req)
 
-     if (!role)
-
      if (role != "admin") {
           throw createError(
                "unauthorized",

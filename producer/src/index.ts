@@ -9,12 +9,17 @@ import path from "path";
 import { createServer, Server } from "http";
 import { bootstrap, shutdown } from "./utils/server.util";
 
+var cookieParser = require('cookie-parser')
+
 dotenv.config({ path: path.resolve(__dirname, "../../.env.dev") });
 
 const app = express();
 const port = String(process.env.APP_PORT || "3000");
 
-app.use(rateLimitMiddleware);
+app.use(cookieParser())
+app.use(express.json())
+
+// app.use(rateLimitMiddleware);
 app.use(express.json());
 app.use("/api/v1/", v1Route);
 app.use(errorHandler);

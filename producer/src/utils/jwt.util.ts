@@ -2,21 +2,22 @@ import { Request } from "express"
 import jwt, { Jwt } from "jsonwebtoken"
 import { createError } from "../exceptions/error.exception"
 import { Payload } from "./types.util"
-
-const JWT_KEY: string = String(process.env.JWT_KEY)
+import { logger } from "./logger.util"
 
 export const generateToken = (userId: string, role: string) => {
+     const JWT_KEY: string = String(process.env.JWT_KEY)
      return jwt.sign({
-          role: userId,
-          id: String(role)
+          role: role,
+          id: userId
      }, JWT_KEY, {
           expiresIn: "15m",
           issuer: "pemilos-backend",
-          notBefore: Date.now()
      })
 }
 
 export const verifyToken = (token: string) => {
+     const JWT_KEY: string = String(process.env.JWT_KEY)
+     logger.info(JWT_KEY)
      try {
           return jwt.verify(token, JWT_KEY)
      } catch (error) {
@@ -25,7 +26,7 @@ export const verifyToken = (token: string) => {
 }
 
 export const getPayload = (req: Request) => {
-     const token: string | undefined = req.headers.authorization?.split(' ')[1];
+     const token: string | undefined = req.cookies.pemilostoken
      if (!token) {
           throw createError(
                "unauthorized",
@@ -34,8 +35,8 @@ export const getPayload = (req: Request) => {
           )
      }
 
-     const decoded = jwt.verify(token, JWT_KEY) as jwt.JwtPayload
-     if (!decoded.sub) {
+     const decoded = jwt.decode(token) as Payload
+     if (!decoded) {
           throw createError(
                "failed",
                "internal server error",
@@ -43,5 +44,5 @@ export const getPayload = (req: Request) => {
           )
      }
 
-     return decoded as Payload
+     return decoded
 }

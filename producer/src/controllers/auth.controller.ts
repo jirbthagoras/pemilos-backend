@@ -22,16 +22,14 @@ export const login = asyncHandler(async (req, res) =>  {
           } as PostUserLogin
      );
 
-     let tokenAge = 60 * 1000;
+     let cookieAge = 5 * 60 * 1000;
 
      if (user.role == "admin") {
-          tokenAge = 24 * 60 * 60 * 1000;
+          // generate token as admin
+          cookieAge = 24 * 60 * 60 * 1000;
      }
 
-     logger.info(`Token age: ${tokenAge}`)
-
-     // Creates a JWT token with provided KEY in .env
-     const token = generateToken(user._id.toString(), user.role)
+     const token = generateToken(user._id.toString(), user.role, cookieAge / 1000)
 
      // Then create an httpOnly cookie that contains the token
      res.cookie('pemilostoken', token, {
@@ -39,7 +37,7 @@ export const login = asyncHandler(async (req, res) =>  {
         secure: true,
         sameSite: 'strict',
         path: "/api/v1",
-        maxAge: tokenAge
+        maxAge: cookieAge
     })
 
      res.status(200).json({
@@ -53,16 +51,12 @@ export const login = asyncHandler(async (req, res) =>  {
 // Cuz, we're using httpOnly so let's make a function that frontend will be often using
 export const checkProfile = asyncHandler(async (req, res) => {
      // get the payload
-     const {
-          id, role
-     } = getPayload(req)
+     const decoded = getPayload(req)
 
      res.status(200).json({
           "status": "success",
           "message": "successlly get the profile",
-          "data": {
-               id, role
-          },
+          "data": decoded,
      })
 
      return

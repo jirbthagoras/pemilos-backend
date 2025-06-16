@@ -4,13 +4,13 @@ import { createError } from "../exceptions/error.exception"
 import { Payload } from "./types.util"
 import { logger } from "./logger.util"
 
-export const generateToken = (userId: string, role: string) => {
+export const generateToken = (userId: string, role: string, expiresIn: number) => {
      const JWT_KEY: string = String(process.env.JWT_KEY)
      return jwt.sign({
           role: role,
           id: userId
      }, JWT_KEY, {
-          expiresIn: "15m",
+          expiresIn,
           issuer: "pemilos-backend",
      })
 }

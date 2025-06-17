@@ -6,7 +6,7 @@ import { logger } from "../utils/logger.util";
 import { createError } from "../exceptions/error.exception";
 
 // receive one or more user, and then input it to database.
-export const saveManyVoters = async (
+export const voterSaveMany = async (
      voters: Voter[]
 ) => {
      try {
@@ -19,8 +19,8 @@ export const saveManyVoters = async (
      } catch (err) {
           throw createError(
                "failed",
-               "failed to insert the data",
-               400,
+               "failed to insert the voter csv",
+               500,
                err
           )
      }

@@ -5,7 +5,7 @@ import { Voter } from "../utils/types.util"
 import { createError } from "../exceptions/error.exception";
 import { generatePassword } from "../utils/auth.util";
 import { logger } from "../utils/logger.util";
-import { saveManyVoters } from "../services/voter.service";
+import { voterSaveMany } from "../services/voter.service";
 import { asyncHandler } from "../middlewares/async_handler.middleware";
 
 export const uploadVoterFromCsv = asyncHandler(async (req, res, next) => {
@@ -32,7 +32,7 @@ export const uploadVoterFromCsv = asyncHandler(async (req, res, next) => {
       .on("error", reject)
   });
 
-  await saveManyVoters(voters)
+  await voterSaveMany(voters)
   logger.info("saved voters")
   fs.unlinkSync(filePath)
 

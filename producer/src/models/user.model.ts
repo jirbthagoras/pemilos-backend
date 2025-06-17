@@ -48,7 +48,6 @@ const userSchema = new Schema({
      // Class, if the user is staff or teacher, just write so.
      class: {
           type: String,
-          required: true
      },
      // Password, credentials of user will be used.
      password: {

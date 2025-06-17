@@ -1,8 +1,8 @@
-import { PostUserLogin } from "../dtos/auth.dto"
+import { PostAuthLogin } from "../dtos/auth.dto"
 import { createError } from "../exceptions/error.exception"
 import { User } from "../models/user.model"
 
-export const authLogin = async(req: PostUserLogin) => {
+export const authLogin = async(req: PostAuthLogin) => {
      // check if there is a user with those username
      const user = await User.findOne({
           username: req.username

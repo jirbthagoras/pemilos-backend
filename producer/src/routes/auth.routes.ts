@@ -10,7 +10,7 @@ import { adminMiddleware } from "../middlewares/admin.middleware"
 const router = Router()
 
 router.post("/login", validateDTO(postAuthLogin), login)
-router.post("/register", adminMiddleware, validateDTO(postUserCreate), createUser)
+router.post("/create", adminMiddleware, validateDTO(postUserCreate), createUser)
 router.get("/me", authMiddleware, checkProfile)
 
 export default router

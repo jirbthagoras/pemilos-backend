@@ -53,12 +53,18 @@ export const login = asyncHandler(async (req, res) =>  {
 // Cuz, we're using httpOnly so let's make a function that frontend will be often using
 export const checkProfile = asyncHandler(async (req, res) => {
      // get the payload
-     const decoded = getPayload(req)
+     const {
+          role,
+          id
+     } = getPayload(req)
 
      res.status(200).json({
           "status": "success",
           "message": "successlly get the profile",
-          "data": decoded,
+          "data": {
+               role, 
+               id
+          },
      })
 
      return

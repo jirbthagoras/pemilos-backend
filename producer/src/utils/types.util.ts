@@ -15,6 +15,18 @@ export type MiddlewareHandler = (
   next: NextFunction
 ) => Promise<void> | void;
 
+// SO this setting will be stored in redis, cuz it will be used sooooo many times.
+// This type will be serialized into string when enters redis.
+export type Settings = {
+  isVotingAllowed: boolean
+}
+
+// this is just the representation of cache setting inside redis.
+// lagi lagi apa? Type safety 
+export type RedisSettingCache = {
+  isVotingAllowed: "true" | "false"
+}
+
 // Here we define a JWT Payload, because this is typescript.
 export type Payload  = {
   id: string,

@@ -1,14 +1,16 @@
 import { connectToMongoose, disconnectMongo } from "../configs/db.config";
-import { disconnectRedis } from "../configs/redis.config";
+import { disconnectRedis, getRedisClient } from "../configs/redis.config";
 import { logger } from "./logger.util";
 import { createServer, Server } from "http";
 import express from "express"
+import { RedisSettingCache } from "./types.util";
 
 
 let server: Server; // this will hold our HTTP server instance
 
 export async function bootstrap(app: express.Express, port: string) {
   const mongoConnected = await connectToMongoose();
+  await initSetting()
   if (!mongoConnected) {
   logger.error("Failed to connect to MongoDB. Exiting.");
     process.exit(1);
@@ -65,3 +67,20 @@ export const shutdown = async (server: Server) => {
     process.exit(1);
   }
 };
+
+
+export const initSetting = async () => {
+  const redis = getRedisClient()
+
+  const key = "setting";
+
+  const setting: RedisSettingCache = {
+    isVotingAllowed: "false"
+  }
+
+  await redis.hset(key, setting)
+
+  logger.info("Setting initiation succeeded")
+
+  return
+}

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { LABEL } from "../utils/variables.util";
+import { CLASS, LABEL } from "../utils/variables.util";
 const { Schema, model } = mongoose;
 
 /* 
@@ -48,6 +48,8 @@ const userSchema = new Schema({
      // Class, if the user is staff or teacher, just write so.
      class: {
           type: String,
+          required: true,
+          enum: CLASS
      },
      // Password, credentials of user will be used.
      password: {

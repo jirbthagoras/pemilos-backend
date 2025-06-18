@@ -7,11 +7,18 @@ export const userCreate = async (req: postUserCreate) => {
           const user = await User.insertOne(req)
           return user
      } catch (err) {
-          throw createError(
-                         "failed",
-                         "failed to insert user",
-                         500,
-                         err
-                    )
+          throw err
+     }
+}
+
+export const deleteUserById = async (req: {
+     id: string
+}) => {
+     try {
+          await User.deleteOne({
+               _id: req.id,
+          })
+     } catch (err) {
+          throw err
      }
 }

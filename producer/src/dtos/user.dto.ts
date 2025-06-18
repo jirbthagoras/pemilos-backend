@@ -14,6 +14,6 @@ export const postUserCreate: ObjectSchema = joi.object().keys({
      name: joi.string().min(5).max(60).required(),
      username: joi.string().min(5).max(30).required(),
      password: joi.string().min(5).max(30).required(),
-     calass: joi.string().valid(CLASS).required(),
-     role: joi.string().valid(["voter", "admin"])
+     class: joi.string().valid(...CLASS).required(),
+     role: joi.string().valid("voter", "admin").required()
 })

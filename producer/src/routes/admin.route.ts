@@ -2,6 +2,12 @@ import { Request, Response, Router } from "express";
 import multer from "multer";
 import { uploadVoterFromCsv } from "../controllers/voter.controller";
 import path from "path";
+import { adminMiddleware } from "../middlewares/admin.middleware";
+import { validateDTO } from "../middlewares/validate.middleware";
+import { postUserCreate } from "../dtos/user.dto";
+import { createUser } from "../controllers/user.controller";
+import { postCandidateCreate } from "../dtos/candidate.dto";
+import { createCandidate } from "../controllers/candidate.controller";
 
 const router = Router()
 
@@ -10,6 +16,8 @@ const upload = multer({
 })
 
 router.post("/upload-csv", upload.single('file'), uploadVoterFromCsv)
+router.post("/user", adminMiddleware, validateDTO(postUserCreate), createUser)
+router.post("/candidate", validateDTO(postCandidateCreate), createCandidate)
 router.get("/", async (req: Request, res: Response) => {
      res.json({
           "message": "Success"

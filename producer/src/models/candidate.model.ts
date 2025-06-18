@@ -13,7 +13,8 @@ const candidateSchema = new Schema({
      },
      number: {
           type: Number,
-          required: true
+          required: true,
+          unique: true
      },
      image: String,
 })

@@ -1,14 +1,15 @@
-import { postUserCreate } from "../dtos/user.dto";
+import { PostUserCreate } from "../dtos/user.dto";
 import { asyncHandler } from "../middlewares/async_handler.middleware";
 import { userCreate } from "../services/user.service";
 
 export const createUser = asyncHandler(async (req, res) => {
      // parse the json from payload
      const {
+          kelas,
           name,
           username,
           password,
-          role
+          role,
      } = req.body
 
      // calls the service
@@ -17,8 +18,9 @@ export const createUser = asyncHandler(async (req, res) => {
                name,
                username,
                password,
+               class: kelas,
                role
-          } as postUserCreate
+          } as PostUserCreate
      );
 
      res.status(201).json({

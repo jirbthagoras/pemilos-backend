@@ -1,7 +1,7 @@
 import joi, { allow, ObjectSchema } from "joi"
 import { CLASS } from "../utils/variables.util"
 
-export type postUserCreate = {
+export type PostUserCreate = {
      name: string,
      username: string,
      password: string,
@@ -14,6 +14,6 @@ export const postUserCreate: ObjectSchema = joi.object().keys({
      name: joi.string().min(5).max(60).required(),
      username: joi.string().min(5).max(30).required(),
      password: joi.string().min(5).max(30).required(),
-     class: joi.string().valid(...CLASS).required(),
+     kelas: joi.string().valid(...CLASS).required(),
      role: joi.string().valid("voter", "admin").required()
 })

@@ -1,8 +1,8 @@
-import { postUserCreate } from "../dtos/user.dto";
+import { PostUserCreate } from "../dtos/user.dto";
 import { createError } from "../exceptions/error.exception";
 import { User } from "../models/user.model";
 
-export const userCreate = async (req: postUserCreate) => {
+export const userCreate = async (req: PostUserCreate) => {
      try {
           const user = await User.insertOne(req)
           return user

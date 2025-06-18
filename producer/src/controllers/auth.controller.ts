@@ -6,6 +6,8 @@ import { authLogin } from "../services/auth.service";
 import { generateToken, getPayload } from "../utils/jwt.util";
 import { logger } from "../utils/logger.util";
 
+const cookieName = "pemilostoken"
+
 export const login = asyncHandler(async (req, res) =>  {
      // parse user credentials
      const {
@@ -34,7 +36,7 @@ export const login = asyncHandler(async (req, res) =>  {
      const token = generateToken(user._id.toString(), user.role, cookieAge / 1000)
 
      // Then create an httpOnly cookie that contains the token
-     res.cookie('pemilostoken', token, {
+     res.cookie(cookieName, token, {
         httpOnly: true, 
         secure: true,
         sameSite: 'strict',
@@ -46,6 +48,25 @@ export const login = asyncHandler(async (req, res) =>  {
           "status": "sucess",
           "message": "login success"
      })
+
+     return
+})
+
+export const logout = asyncHandler(async (req, res) => {
+     // just simply clear the cookie i guess
+     res.clearCookie(cookieName, {
+          httpOnly: true,
+          secure: true,
+          sameSite: 'strict',
+          path: '/api/v1'
+     });
+
+     res.status(200).json({
+          "status": "success",
+          "message": "successfully logged out"
+     })
+
+     res.end()
 
      return
 })

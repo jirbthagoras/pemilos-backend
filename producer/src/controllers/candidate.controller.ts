@@ -1,6 +1,6 @@
 import { PostCandidateCreate } from "../dtos/candidate.dto";
 import { asyncHandler } from "../middlewares/async_handler.middleware";
-import { insertCandidate } from "../services/candidate.service";
+import { candidateGet, candidateInsert } from "../services/candidate.service";
 
 export const createCandidate = asyncHandler(async (req, res) => {
      // parse the request
@@ -8,15 +8,13 @@ export const createCandidate = asyncHandler(async (req, res) => {
           name,
           label,
           number,
-          image
      } = req.body
 
      // calls the user service
-     const result = await insertCandidate({
+     const result = await candidateInsert({
           name,
           label,
           number,
-          image
      } as PostCandidateCreate)
 
      res.status(201).json({
@@ -24,4 +22,16 @@ export const createCandidate = asyncHandler(async (req, res) => {
           "message": "candidate successfully created",
           "data": result
      })
+})
+
+export const getCandidate = asyncHandler(async (req, res) => {
+     // Calls the candidate service
+     const candidates = await candidateGet()
+
+     res.status(200).json({
+          "status": "success",
+          "message": "successfully query the candidates",
+          "data": candidates
+     })
+     return
 })

@@ -26,7 +26,7 @@ export const rateLimitMiddleware: MiddlewareHandler = async (req, res, next) => 
 
      // Throw the error if the request count inside the sorted sets is reached limit
      if (reqCount >= MAX_REQUESTS) {
-          res.status(401).json({
+          res.status(429).json({
                "status": "unauthorized",
                "message": "you already reached the request limit"
           })

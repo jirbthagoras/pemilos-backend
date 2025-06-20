@@ -55,6 +55,12 @@ const userSchema = new Schema({
      password: {
           type: String,
           required: true,
+     },
+     // IsVoted, this is a denormalization
+     isVoted: {
+          type: Boolean,
+          required: true,
+          default: false
      }
 })
 

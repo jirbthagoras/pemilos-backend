@@ -5,10 +5,12 @@ import { Voter } from "../utils/types.util"
 import { createError } from "../exceptions/error.exception";
 import { generatePassword } from "../utils/auth.util";
 import { logger } from "../utils/logger.util";
-import { voterSaveMany } from "../services/voter.service";
+import { voterSaveMany, voterSaveVote } from "../services/voter.service";
 import { asyncHandler } from "../middlewares/async_handler.middleware";
+import { PostInsertVote } from "../dtos/vote.dto";
+import { getPayload } from "../utils/jwt.util";
 
-export const uploadVoterFromCsv = asyncHandler(async (req, res, next) => {
+export const uploadVoterFromCsv = asyncHandler(async (req, res) => {
   const voters: Voter[] = []
 
   if (!req.file) {
@@ -41,3 +43,26 @@ export const uploadVoterFromCsv = asyncHandler(async (req, res, next) => {
     message: "Voters, successfully created"
   });
 });
+
+export const vote = asyncHandler(async (req, res) => {
+  // Parse the payload
+    const {
+      osis,
+      mpk
+    } = req.body
+
+    // get the userid from httpOnly cookie
+         const {
+              id
+         } = getPayload(req)
+    
+    // Calls the service
+    await voterSaveVote({
+      osis, mpk
+    } as PostInsertVote, id)
+
+    res.status(201).json({
+      "status": "success",
+      "message": "successfully inserted vote"
+    })
+})

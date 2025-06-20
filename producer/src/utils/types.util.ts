@@ -30,5 +30,5 @@ export type RedisSettingCache = {
 // Here we define a JWT Payload, because this is typescript.
 export type Payload  = {
   id: string,
-  role: "voter" | "admin" | "super-admin"
+  role: "voter" | "admin"
 }

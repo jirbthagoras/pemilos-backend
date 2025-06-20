@@ -1,8 +1,7 @@
 import { Request } from "express"
-import jwt, { Jwt } from "jsonwebtoken"
+import jwt from "jsonwebtoken"
 import { createError } from "../exceptions/error.exception"
 import { Payload } from "./types.util"
-import { logger } from "./logger.util"
 
 export const generateToken = (userId: string, role: string, expiresIn: number) => {
      const JWT_KEY: string = String(process.env.JWT_KEY)
@@ -17,7 +16,6 @@ export const generateToken = (userId: string, role: string, expiresIn: number) =
 
 export const verifyToken = (token: string) => {
      const JWT_KEY: string = String(process.env.JWT_KEY)
-     logger.info(JWT_KEY)
      try {
           return jwt.verify(token, JWT_KEY)
      } catch (error) {

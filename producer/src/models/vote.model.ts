@@ -25,6 +25,7 @@ const voteSchema = new Schema({
           ref: "User",
           required: true,
      },
+     
      candidate: {
           type: Schema.Types.ObjectId,
           ref: "Candidate",

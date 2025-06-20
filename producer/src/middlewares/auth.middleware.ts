@@ -9,16 +9,16 @@ export const authMiddleware: MiddlewareHandler = (req, res, next) => {
     const token: string | undefined = req.cookies.pemilostoken;
     if (!token) {
         throw createError(
-            "Unauthorized",
-            "Token Required",
+            "unauthorized",
+            "token required, you're not logged in",
             401
         );
     }
 
     if(!verifyToken(token)) {
         throw createError(
-            "Unauthorized",
-            "Invalid Token",
+            "unauthorized",
+            "invalid Token",
             401
         );
     }

@@ -24,11 +24,18 @@ export type Settings = {
 // this is just the representation of cache setting inside redis.
 // lagi lagi apa? Type safety 
 export type RedisSettingCache = {
-  isVotingAllowed: "true" | "false"
+  isVotingAllowed: "true" | "false",
 }
 
 // Here we define a JWT Payload, because this is typescript.
-export type Payload  = {
+export type Payload = {
   id: string,
   role: "voter" | "admin"
+}
+
+export type RedisCandidate = {
+  id: string,
+  label: string,
+  number: string,
+  image: string
 }

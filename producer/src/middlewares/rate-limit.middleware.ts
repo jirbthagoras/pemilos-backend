@@ -1,15 +1,27 @@
-import { NextFunction, Request, Response } from "express";
 import { getRedisClient } from "../configs/redis.config";
 import { createError } from "../exceptions/error.exception";
+import { logger } from "../utils/logger.util";
 import { MiddlewareHandler } from "../utils/types.util";
-
-const WINDOW_SIZE_IN_SECONDS = 60
-const MAX_REQUESTS = 5
 
 // This sliding window algorithm utilize, Redis' ZSET (Sorted set)
 // To organize the request history.
 export const rateLimitMiddleware: MiddlewareHandler = async (req, res, next) => {
      
+     let WINDOW_SIZE_IN_SECONDS: number;
+     let MAX_REQUESTS: number;
+
+     // checks if the env exists
+     if (
+          !process.env.WINDOW_SIZE_IN_SECONDS ||
+          !process.env.MAX_REQUESTS
+     ) {
+          WINDOW_SIZE_IN_SECONDS = 60
+          MAX_REQUESTS = 5
+     } else {
+          WINDOW_SIZE_IN_SECONDS = +process.env.WINDOW_SIZE_IN_SECONDS
+          MAX_REQUESTS = +process.env.MAX_REQUESTS
+     }
+
      // Create redis client first
      const redis = getRedisClient()
 

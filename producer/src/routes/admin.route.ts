@@ -15,9 +15,10 @@ const upload = multer({
   dest: path.resolve(__dirname, "..", "..", "uploads")
 })
 
+router.use(adminMiddleware)
 router.post("/upload-csv", upload.single('file'), uploadVoterFromCsv)
-router.post("/user", adminMiddleware, validateDTO(postUserCreate), createUser)
-router.post("/candidate", adminMiddleware, validateDTO(postCandidateCreate), createCandidate)
+router.post("/user", validateDTO(postUserCreate), createUser)
+router.post("/candidate", validateDTO(postCandidateCreate), createCandidate)
 router.get("/", async (req: Request, res: Response) => {
      res.json({
           "message": "Success"

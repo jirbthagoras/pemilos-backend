@@ -3,9 +3,6 @@ import { validateDTO } from "../middlewares/validate.middleware"
 import { postAuthLogin } from "../dtos/auth.dto"
 import { checkProfile, login, logout } from "../controllers/auth.controller"
 import { authMiddleware } from "../middlewares/auth.middleware"
-import { postUserCreate } from "../dtos/user.dto"
-import { createUser } from "../controllers/user.controller"
-import { adminMiddleware } from "../middlewares/admin.middleware"
 
 const router = Router()
 

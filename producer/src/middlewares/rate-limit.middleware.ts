@@ -7,20 +7,9 @@ import { MiddlewareHandler } from "../utils/types.util";
 // To organize the request history.
 export const rateLimitMiddleware: MiddlewareHandler = async (req, res, next) => {
      
-     let WINDOW_SIZE_IN_SECONDS: number;
-     let MAX_REQUESTS: number;
-
-     // checks if the env exists
-     if (
-          !process.env.WINDOW_SIZE_IN_SECONDS ||
-          !process.env.MAX_REQUESTS
-     ) {
-          WINDOW_SIZE_IN_SECONDS = 60
-          MAX_REQUESTS = 5
-     } else {
-          WINDOW_SIZE_IN_SECONDS = +process.env.WINDOW_SIZE_IN_SECONDS
-          MAX_REQUESTS = +process.env.MAX_REQUESTS
-     }
+     // Checks and casts the provided env
+     const WINDOW_SIZE_IN_SECONDS = +String(process.env.WINDOW_SIZE_IN_SECONDS) || 60;
+     const MAX_REQUESTS = +String(process.env.MAX_REQUESTS) || 5;
 
      // Create redis client first
      const redis = getRedisClient()

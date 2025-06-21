@@ -17,14 +17,17 @@ export type MiddlewareHandler = (
 
 // SO this setting will be stored in redis, cuz it will be used sooooo many times.
 // This type will be serialized into string when enters redis.
+// this type also a definition of "setting" hashed value in redis. Just make sure if u guys understand 
 export type Settings = {
-  isVotingAllowed: boolean
+  isVotingAllowed?: boolean,
+  candidates?: RedisCandidateCache[]
 }
 
 // this is just the representation of cache setting inside redis.
 // lagi lagi apa? Type safety 
 export type RedisSettingCache = {
   isVotingAllowed: "true" | "false",
+  candidates: string
 }
 
 // Here we define a JWT Payload, because this is typescript.
@@ -33,7 +36,7 @@ export type Payload = {
   role: "voter" | "admin"
 }
 
-export type RedisCandidate = {
+export type RedisCandidateCache = {
   id: string,
   label: string,
   number: string,

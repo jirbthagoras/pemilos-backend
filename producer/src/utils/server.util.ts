@@ -76,7 +76,8 @@ export const initSetting = async () => {
 
   // for debugging
   const setting: RedisSettingCache = {
-    isVotingAllowed: "true"
+    isVotingAllowed: "true",
+    candidates: ""
   }
 
   await redis.hset(key, setting)

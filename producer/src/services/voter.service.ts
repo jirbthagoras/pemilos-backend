@@ -7,6 +7,7 @@ import { Vote } from "../models/vote.model";
 import { getRedisClient } from "../configs/redis.config";
 import debounce from "lodash/debounce";
 import { getPusherClient } from "../configs/pusher.config";
+import { Candidate } from "../models/candidate.model";
 
 // receive one or more user, and then input it to database.
 export const voterSaveMany = async (
@@ -36,7 +37,7 @@ export const voterSaveVote = async (req: PostInsertVote, userId: string) => {
      // Acquire lock, exclusive process starts here.
      let lock = await getRedlock().acquire([lockName], 3000)
      try {
-          // Checks the setting
+          // Checks the setting, is voting allowed or nah
           const rawData = await getRedisClient().hgetall("setting");
           const setting: Settings = {
                isVotingAllowed: rawData.isVotingAllowed === "true"
@@ -47,6 +48,55 @@ export const voterSaveVote = async (req: PostInsertVote, userId: string) => {
                     "failed",
                     "vote not allowed",
                     400
+               )
+          }
+
+          // Checks if the id in the payload is valid
+
+          const osis = await Candidate.findOne({
+               "_id": req.osis,
+               "label": "osis"
+          })
+
+          const mpk = await Candidate.findOne({
+               "_id": req.mpk,
+               "label": "mpk"
+          })
+
+          if (!osis || !mpk) {
+               throw createError(
+                    "failed",
+                    "candidate chosen is not valid",
+                    401
+               )
+          }
+
+          // Checks if the user exists just to make sure, and yeah defensive coding buddy.
+          const user = await User.findById(userId)
+          if (!user) {
+               throw createError(
+                    "failed",
+                    "user with such id not found",
+                    401
+               )
+          }
+
+          // Checks if the user already voted
+
+          if (user.isVoted) {
+               throw createError(
+                    "failed",
+                    "user already voted",
+                    401
+               )
+          }
+
+          // Checks if the user is an admin
+          if (user.class = "ADMIN") {
+               throw createError(
+                    "failed",
+                    "bro u're literally admin, why u vote",
+                    401
                )
           }
 
@@ -79,7 +129,9 @@ export const voterSaveVote = async (req: PostInsertVote, userId: string) => {
                }
           })
 
-          // push livecount
+          // push livecount, started the debouncing algorithm w/lodash.
+          // Debouncing algorithm allows a specific function to be called after a period of silence.
+          // Makes it more suitable for this condition.
           voterPushLiveCount()
      } catch (err) {
           throw err

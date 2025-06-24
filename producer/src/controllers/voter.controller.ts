@@ -5,7 +5,7 @@ import { Voter } from "../utils/types.util"
 import { createError } from "../exceptions/error.exception";
 import { generatePassword } from "../utils/auth.util";
 import { logger } from "../utils/logger.util";
-import { voterSaveMany, voterSaveVote } from "../services/voter.service";
+import { voterResetVote, voterSaveMany, voterSaveVote } from "../services/voter.service";
 import { asyncHandler } from "../middlewares/async_handler.middleware";
 import { PostInsertVote } from "../dtos/vote.dto";
 import { getPayload } from "../utils/jwt.util";
@@ -65,4 +65,19 @@ export const vote = asyncHandler(async (req, res) => {
       "status": "success",
       "message": "successfully inserted vote"
     })
+})
+
+export const resetVote = asyncHandler(async (req, res) => {
+  // Take the payload
+  const {
+    username
+  } = req.body
+
+  // calls the service
+  await voterResetVote(username)
+
+  res.status(200).json({
+    "status": "sucess",
+    "message": "user vote status resetted",
+  })
 })

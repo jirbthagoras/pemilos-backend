@@ -8,6 +8,7 @@ import { getRedisClient } from "../configs/redis.config";
 import debounce from "lodash/debounce";
 import { getPusherClient } from "../configs/pusher.config";
 import { Candidate } from "../models/candidate.model";
+import { logger } from "../utils/logger.util";
 
 // receive one or more user, and then input it to database.
 export const voterSaveMany = async (
@@ -83,7 +84,11 @@ export const voterSaveVote = async (req: PostInsertVote, userId: string) => {
 
           // Checks if the user already voted
 
-          if (user.isVoted) {
+          const vote = await Vote.findOne({
+               user: userId
+          })
+
+          if (user.isVoted || vote) {
                throw createError(
                     "failed",
                     "user already voted",
@@ -92,7 +97,7 @@ export const voterSaveVote = async (req: PostInsertVote, userId: string) => {
           }
 
           // Checks if the user is an admin
-          if (user.class = "ADMIN") {
+          if (user.role == "admin") {
                throw createError(
                     "failed",
                     "bro u're literally admin, why u vote",
@@ -202,3 +207,29 @@ export const voterPushLiveCount = debounce(async () => {
      pusher.trigger("pemilose", "pemilolot", result)
      return
 }, 3000)
+
+export const voterResetVote = async (username: string) => {
+     try {
+          const user = await User.findOneAndUpdate({
+               "username": username
+          }, {
+               $set: {
+                    isVoted: false
+               }
+          })
+
+          if (!user) {
+               throw createError(
+                    "failed",
+                    "user with such credentials not found",
+                    401
+               )
+          }
+
+          await Vote.deleteOne({
+               user: user._id
+          })
+     } catch (err) {
+          throw err
+     }
+}

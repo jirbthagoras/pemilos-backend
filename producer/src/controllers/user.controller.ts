@@ -1,6 +1,6 @@
 import { GetUser, PostUserCreate } from "../dtos/user.dto";
 import { asyncHandler } from "../middlewares/async_handler.middleware";
-import { userCreate, userGetAll } from "../services/user.service";
+import { userCreate, userGetAll, userGetById } from "../services/user.service";
 import { logger } from "../utils/logger.util";
 
 export const createUser = asyncHandler(async (req, res) => {
@@ -38,12 +38,13 @@ export const getAllUser = asyncHandler(async (req, res) => {
           page = 1,
           isVoted = false,
           kelas,
-          role = "voter"
+          role = "voter",
+          name = ""
      } = req.query
 
      // calls the service
      const users = await userGetAll({
-          page, isVoted, kelas, role
+          page, isVoted, kelas, role, name
      } as GetUser)
 
      res.status(200).json({
@@ -51,8 +52,20 @@ export const getAllUser = asyncHandler(async (req, res) => {
           message: "successfully get the user",
           data: users
      })
+     return
 })
 
-export const getUserByName = asyncHandler(async (req, res) => {
+export const getUserById = asyncHandler(async (req, res) => {
+     // get from payload
+     const { id } = req.params
 
+     // calls the service
+     const user = await userGetById(id)
+
+     res.status(200).json({
+          status: "success",
+          message: "successfully get the user by id",
+          data: user
+     })
+     return
 })

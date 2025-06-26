@@ -19,6 +19,7 @@ export const postUserCreate: ObjectSchema = joi.object().keys({
 })
 
 export type GetUser = {
+     name: string
      page: number,
      isVoted: boolean,
      kelas?: string,
@@ -26,8 +27,13 @@ export type GetUser = {
 }
 
 export const getUser: ObjectSchema = joi.object().keys({
+     name: joi.string(),
      page: joi.number(),
      isVoted: joi.boolean(),
      kelas: joi.number().optional(),
      role: joi.string()
+})
+
+export const getUserByName: ObjectSchema = joi.object().keys({
+     name: joi.string().required()
 })

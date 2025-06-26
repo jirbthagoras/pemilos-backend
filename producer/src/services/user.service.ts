@@ -17,9 +17,7 @@ export const userDeleteById = async (req: {
      id: string
 }) => {
      try {
-          await User.deleteOne({
-               _id: req.id,
-          })
+          await User.findByIdAndDelete(req.id)
      } catch (err) {
           throw err
      }
@@ -40,18 +38,30 @@ export const userGetAll = async (
           const query: any = {
                role: req.role,
                isVoted: req.isVoted,
+               // Do not give any sweats on ts, it just a basic LIKE keyword
+               name: {
+                    $regex: req.name, $options: "i"
+               }
           }
 
           if (req.kelas) {
                query.class = req.kelas
           }
 
-          logger.info(query)
-
           const users = await User.find()
           .where(query)
+          .select("name class username _id isVoted")
           .skip(skip(req.page)).limit(limit).lean()
           return users
+     } catch (err) {
+          throw err
+     }
+}
+
+export const userGetById = async (id: string) => {
+     try {
+          const user = await User.findById(id).lean()
+          return user
      } catch (err) {
           throw err
      }

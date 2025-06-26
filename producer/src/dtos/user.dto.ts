@@ -17,3 +17,17 @@ export const postUserCreate: ObjectSchema = joi.object().keys({
      kelas: joi.string().valid(...CLASS).required(),
      role: joi.string().valid("voter", "admin").required()
 })
+
+export type GetUser = {
+     page: number,
+     isVoted: boolean,
+     kelas?: string,
+     role: "voter" | "admin"
+}
+
+export const getUser: ObjectSchema = joi.object().keys({
+     page: joi.number(),
+     isVoted: joi.boolean(),
+     kelas: joi.number().optional(),
+     role: joi.string()
+})

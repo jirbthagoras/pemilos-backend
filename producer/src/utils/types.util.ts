@@ -6,6 +6,7 @@ export type Voter = {
   username: string;
   class: string;
   password: string;
+  isVoted: boolean
 }
 
 // A handler yield by middleware.

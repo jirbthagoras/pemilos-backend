@@ -28,6 +28,7 @@ export const uploadVoterFromCsv = asyncHandler(async (req, res) => {
           username: data.USERNAME,
           class: data.CLASS,
           password: generatePassword(data.USERNAME),
+          isVoted: false
         });
       })
       .on("end", resolve)

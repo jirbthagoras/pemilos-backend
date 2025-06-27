@@ -1,4 +1,9 @@
-Chill, this clowny repo is just my small project to learn some new technologies like TypeScript, ExpressJS, MongoDB, Docker, and maybe Kafka or some Observability techs like OTel and Grafana (y not Jaeger? Cuz I do not need a tracer for now, just custom metrics).
+
+# Overview
+
+This repository is my team project to make an vote taking system, that will be used for Pemilos.
+
+# Tech Stacks
 
 So here are some several components that will be used in this project:
 - TypeScript, one of static typing language good for defensive programming.
@@ -13,5 +18,12 @@ So here are some several components that will be used in this project:
 - OTel, Grafana (not yet confirmed, but i really want to use it)
 
 N/B: Decides to not use Kafka for some reason.
+
+# Documentation
+
+<a href="https://documenter.getpostman.com/view/34415611/2sB2xFdnHX">Click me</a>
+
+# ToDo
+- Buat README.md semakin indah :V
 
 So yeah, this is my clowny repo. I hope ts will be used later haha... pls

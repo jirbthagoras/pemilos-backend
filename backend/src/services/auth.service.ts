@@ -16,6 +16,14 @@ export const authLogin = async(req: PostAuthLogin) => {
           )
      }
 
+     if (user.isVoted) {
+          throw createError(
+               "failed",
+               "failed to logged in, your account already voted",
+               401
+          )
+     }
+
      // checks the password or token or, u said lah
      if (req.password != user.password) {
           throw createError(

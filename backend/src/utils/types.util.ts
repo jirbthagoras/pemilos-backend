@@ -43,3 +43,8 @@ export type RedisCandidateCache = {
   number: string,
   image: string
 }
+
+export type VoteCount = {
+  _id: boolean,
+  count: number
+}

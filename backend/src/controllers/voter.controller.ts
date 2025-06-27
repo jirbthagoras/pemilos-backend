@@ -5,7 +5,7 @@ import { Voter } from "../utils/types.util"
 import { createError } from "../exceptions/error.exception";
 import { generatePassword } from "../utils/auth.util";
 import { logger } from "../utils/logger.util";
-import { voterResetVote, voterSaveMany, voterSaveVote } from "../services/voter.service";
+import { voterCount, voterResetVote, voterSaveMany, voterSaveVote } from "../services/voter.service";
 import { asyncHandler } from "../middlewares/async_handler.middleware";
 import { PostInsertVote } from "../dtos/vote.dto";
 import { getPayload } from "../utils/jwt.util";
@@ -81,4 +81,17 @@ export const resetVote = asyncHandler(async (req, res) => {
     "status": "sucess",
     "message": "user vote status resetted",
   })
+})
+
+// This controller will count and return how much voter that voted, and nah.
+export const countVoter = asyncHandler(async (req, res) => {
+  // Calls the service
+  const result = await voterCount()
+
+  res.status(200).json({
+    status: "success",
+    message: "successfully get the voter count",
+    data: result
+  })
+  return
 })

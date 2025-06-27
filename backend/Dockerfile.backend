@@ -2,11 +2,11 @@ FROM node:alpine AS builder
 
 WORKDIR /build
 
-COPY ./producer/package*.json ./
+COPY ./backend/package*.json ./
 
 RUN npm install
 
-COPY ./producer ./
+COPY ./backend ./
 
 RUN npm run build
 

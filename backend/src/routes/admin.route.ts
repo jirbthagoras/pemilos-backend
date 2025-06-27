@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import multer from "multer";
-import { resetVote, uploadVoterFromCsv } from "../controllers/voter.controller";
+import { countVoter, resetVote, uploadVoterFromCsv } from "../controllers/voter.controller";
 import path from "path";
 import { adminMiddleware } from "../middlewares/admin.middleware";
 import { validateDTO } from "../middlewares/validate.middleware";
@@ -25,10 +25,6 @@ router.post("/candidate", validateDTO(postCandidateCreate), createCandidate)
 router.delete("/reset", validateDTO(deleteResetVote), resetVote)
 router.get("/user", validateDTO(getUser), getAllUser)
 router.get("/user/:id", getUserById)
-router.get("/", async (req: Request, res: Response) => {
-     res.json({
-          "message": "Success"
-     })
-})
+router.get("/count", countVoter)
 
 export default router

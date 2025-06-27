@@ -1,4 +1,4 @@
-import { Settings, Voter } from "../utils/types.util";
+import { Settings, VoteCount, Voter } from "../utils/types.util";
 import { User } from "../models/user.model";
 import { createError } from "../exceptions/error.exception";
 import { getRedlock } from "../configs/redlock.config";
@@ -229,6 +229,30 @@ export const voterResetVote = async (username: string) => {
           await Vote.deleteOne({
                user: user._id
           })
+     } catch (err) {
+          throw err
+     }
+}
+
+export const voterCount = async () => {
+     try {
+          const result: VoteCount[] = await User.aggregate([
+               {
+                    $match: {
+                         role: "voter"
+                    },
+               },
+               {
+                    $group: {
+                         _id: "$isVoted",
+                         count: {
+                              $sum: 1
+                         }
+                    }
+               }
+          ])
+
+          return result
      } catch (err) {
           throw err
      }

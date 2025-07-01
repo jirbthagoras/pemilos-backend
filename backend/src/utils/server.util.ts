@@ -76,7 +76,7 @@ export const initSetting = async () => {
 
   // for debugging
   const setting: RedisSettingCache = {
-    isVotingAllowed: "true",
+    isVotingAllowed: "false",
     candidates: ""
   }
 

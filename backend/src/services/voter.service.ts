@@ -39,12 +39,10 @@ export const voterSaveVote = async (req: PostInsertVote, userId: string) => {
      let lock = await getRedlock().acquire([lockName], 3000)
      try {
           // Checks the setting, is voting allowed or nah
-          const rawData = await getRedisClient().hgetall("setting");
-          const setting: Settings = {
-               isVotingAllowed: rawData.isVotingAllowed === "true"
-          }
+          const rawData = await getRedisClient().hget("setting", "isVotingAllowed")
+          const isVotingAllowed = rawData === "true"
 
-          if (!setting.isVotingAllowed) {
+          if (!isVotingAllowed) {
                throw createError(
                     "failed",
                     "vote not allowed",

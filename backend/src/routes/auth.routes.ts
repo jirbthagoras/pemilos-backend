@@ -7,7 +7,6 @@ import { rateLimitMiddleware } from "../middlewares/rate-limit.middleware"
 
 const router = Router()
 
-router.use(rateLimitMiddleware)
 router.post("/login", validateDTO(postAuthLogin), login)
 router.use(authMiddleware)
 router.delete("/logout", logout)

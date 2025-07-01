@@ -15,6 +15,15 @@ export const login = asyncHandler(async (req, res) =>  {
           password
      } = req.body;
      
+     // checks if the user is logged in currently
+     // const session: string | undefined = req.cookies.pemilostoken;
+     // if (!session) {
+     //      throw createError(
+     //           "failed",
+     //           "you're already logged in",
+     //           401
+     //      );
+     // }
 
      // And then here we calls the service
      const user = await authLogin(

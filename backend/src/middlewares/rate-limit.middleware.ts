@@ -1,7 +1,8 @@
 import { getRedisClient } from "../configs/redis.config";
-import { createError } from "../exceptions/error.exception";
-import { logger } from "../utils/logger.util";
 import { MiddlewareHandler } from "../utils/types.util";
+
+// this rate limit just limits the backend application and not both.
+// for the frontend i most likely will use something like nginx rate limiter.
 
 // This sliding window algorithm utilize, Redis' ZSET (Sorted set)
 // To organize the request history.

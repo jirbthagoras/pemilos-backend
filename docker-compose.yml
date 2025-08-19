@@ -2,7 +2,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: ./producer/Dockerfile.producer
+      dockerfile: ./backend/Dockerfile.backend
     ports:
       - "5000:5000"
     environment:
@@ -23,19 +23,19 @@ services:
       - pemilos_network
 
   redis:
-      image: redis:7-alpine
-      volumes:
-        - ./redis.conf:/usr/local/etc/redis/redis.conf
-      command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
-      ports:
-        - "6379:6379"
-      networks:
-        - pemilos_network
+    image: redis:7-alpine
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    ports:
+      - "6379:6379"
+    networks:
+      - pemilos_network
 
   mongo_db:
     image: bitnami/mongodb
     volumes:
-       - pemilos_mongo:/data/db
+      - pemilos_mongo:/data/db
     restart: always
     ports:
       - "27017:27017"

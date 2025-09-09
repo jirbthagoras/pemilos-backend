@@ -1,0 +1,16 @@
+// Ganti 'mydb' sama nama database yang ada di environment.
+db = db.getSiblingDB('mydb');
+
+if (!db.getCollectionNames().includes("users")) {
+    db.createCollection("users");
+}
+
+// please amankan credentials sebelum deploy
+db.users.insertOne({
+    username: "",
+    name: "",
+    role: "",
+    class: "",
+    password: "
+    isVoted:
+})

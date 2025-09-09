@@ -26,7 +26,7 @@ services:
     image: redis:7-alpine
     volumes:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
-    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
     ports:
       - "6379:6379"
     networks:
@@ -36,6 +36,7 @@ services:
     image: bitnami/mongodb
     volumes:
       - pemilos_mongo:/data/db
+      - ./config/mongo:/docker-entrypoint-initdb.d
     restart: always
     ports:
       - "27017:27017"
@@ -49,8 +50,106 @@ services:
     networks:
       - pemilos_network
 
+  grafana:
+    image: grafana/grafana-oss
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    networks:
+      - pemilos_network
+    volumes:
+      - grafana_storage:/var/lib/grafana
+      - ./config/grafana/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro
+      - ./config/grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml:ro
+      - ./config/grafana:/etc/grafana/provisioning/dashboards/json:ro
+
+  node_exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - --path.procfs=/host/proc
+      - --path.sysfs=/host/sys
+      - --path.rootfs=/rootfs
+      - --collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)
+      - --collector.interrupts
+      - --collector.processes
+      - --path.udev.data=/rootfs/run/udev/data
+    expose:
+      - 9100
+    networks:
+      - pemilos_network
+
+  mongodb_exporter:
+    image: percona/mongodb_exporter:0.40.0
+    environment:
+      MONGODB_URI: mongodb://${MONGODB_ROOT_USER}:${MONGODB_ROOT_PASSWORD}@${MONGODB_HOST}:${MONGODB_PORT}
+    command: [ "--collect-all", "--compatible-mode", "--discovering-mode" ]
+    ports:
+      - "9216:9216"
+    restart: unless-stopped
+    networks:
+      - pemilos_network
+    env_file:
+      - .env
+    depends_on:
+      - mongo_db
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    restart: unless-stopped
+    volumes:
+      - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    environment:
+      MONGODB_HOST: ${MONGODB_HOST}
+      MONGODB_PORT: ${MONGODB_PORT}
+      NODE_EXPORTER_HOST: ${NODE_EXPORTER_HOST}
+      NODE_EXPORTER_PORT: ${NODE_EXPORTER_PORT}
+    env_file:
+      - .env
+    expose:
+      - 9090
+    networks:
+      - pemilos_network
+
+  loki:
+    image: grafana/loki:3.4.1
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yml
+    volumes:
+      - ./config/loki/loki.yml:/etc/loki/local-config.yml:ro
+      - loki_data:/loki
+    networks:
+      - pemilos_network
+
+  promtail:
+    image: grafana/promtail:3.4.1
+    command: -config.file=/etc/promtail/config.yml
+    volumes:
+      - ./config/promtail/promtail.yml:/etc/promtail/config.yml:ro
+      - /var/log/nginx:/var/log/nginx
+    networks:
+      - pemilos_network
+
 networks:
   pemilos_network:
 
 volumes:
   pemilos_mongo:
+  grafana_storage:
+  prometheus_data:
+  loki_data:

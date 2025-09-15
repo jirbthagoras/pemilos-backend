@@ -1,23 +1,28 @@
 import path from "path";
 import fs from "fs";
 import csv from "csv-parser";
-import { Voter } from "../utils/types.util"
+import { Voter } from "../utils/types.util";
 import { createError } from "../exceptions/error.exception";
 import { generatePassword } from "../utils/auth.util";
 import { logger } from "../utils/logger.util";
-import { voterCount, voterResetVote, voterSaveMany, voterSaveVote } from "../services/voter.service";
+import {
+  voterCount,
+  voterResetVote,
+  voterSaveMany,
+  voterSaveVote,
+} from "../services/voter.service";
 import { asyncHandler } from "../middlewares/async_handler.middleware";
 import { PostInsertVote } from "../dtos/vote.dto";
 import { getPayload } from "../utils/jwt.util";
 
 export const uploadVoterFromCsv = asyncHandler(async (req, res) => {
-  const voters: Voter[] = []
+  const voters: Voter[] = [];
 
   if (!req.file) {
-    throw createError("failed", "no file attached", 400)
+    throw createError("failed", "no file attached", 400);
   }
 
-  const filePath = path.resolve(req.file.path)
+  const filePath = path.resolve(req.file.path);
 
   await new Promise<void>((resolve, reject) => {
     fs.createReadStream(filePath)
@@ -28,70 +33,102 @@ export const uploadVoterFromCsv = asyncHandler(async (req, res) => {
           username: data.USERNAME,
           class: data.CLASS,
           password: generatePassword(data.USERNAME),
-          isVoted: false
+          isVoted: false,
         });
       })
       .on("end", resolve)
-      .on("error", reject)
+      .on("error", reject);
   });
 
-  await voterSaveMany(voters)
-  logger.info("saved voters")
-  fs.unlinkSync(filePath)
+  await voterSaveMany(voters);
+  logger.info("saved voters");
+  fs.unlinkSync(filePath);
 
   res.status(201).json({
     status: "success",
-    message: "Voters, successfully created"
+    message: "Voters, successfully created",
+  });
+});
+
+export const exportTokenizedVoterFromCSV = asyncHandler(async (req, res) => {
+  const voters: Voter[] = [];
+
+  if (!req.file) {
+    throw createError("failed", "no file attached", 400);
+  }
+
+  const filePath = path.resolve(req.file.path);
+
+  await new Promise<void>((resolve, reject) => {
+    fs.createReadStream(filePath)
+      .pipe(csv())
+      .on("data", (data) => {
+        voters.push({
+          name: data.NAME,
+          username: data.USERNAME,
+          class: data.CLASS,
+          password: data.TOKEN,
+          isVoted: false,
+        });
+      })
+      .on("end", resolve)
+      .on("error", reject);
+  });
+
+  await voterSaveMany(voters);
+  logger.info("saved voters");
+  fs.unlinkSync(filePath);
+
+  res.status(201).json({
+    status: "success",
+    message: "Voters, successfully created",
   });
 });
 
 export const vote = asyncHandler(async (req, res) => {
   // Parse the payload
-    const {
+  const { osis, mpk } = req.body;
+
+  // get the userid from httpOnly cookie
+  const { id } = getPayload(req);
+
+  // Calls the service
+  await voterSaveVote(
+    {
       osis,
-      mpk
-    } = req.body
+      mpk,
+    } as PostInsertVote,
+    id,
+  );
 
-    // get the userid from httpOnly cookie
-         const {
-              id
-         } = getPayload(req)
-    
-    // Calls the service
-    await voterSaveVote({
-      osis, mpk
-    } as PostInsertVote, id)
-
-    res.status(201).json({
-      "status": "success",
-      "message": "successfully inserted vote"
-    })
-})
+  res.status(201).json({
+    status: "success",
+    message: "successfully inserted vote",
+  });
+});
 
 export const resetVote = asyncHandler(async (req, res) => {
   // Take the payload
-  const {
-    username
-  } = req.body
+  const { username } = req.body;
 
   // calls the service
-  await voterResetVote(username)
+  await voterResetVote(username);
 
   res.status(200).json({
-    "status": "sucess",
-    "message": "user vote status resetted",
-  })
-})
+    status: "sucess",
+    message: "user vote status resetted",
+  });
+});
 
 // This controller will count and return how much voter that voted, and nah.
 export const countVoter = asyncHandler(async (req, res) => {
   // Calls the service
-  const result = await voterCount()
+  const result = await voterCount();
 
   res.status(200).json({
     status: "success",
     message: "successfully get the voter count",
-    data: result
-  })
-  return
-})
+    data: result,
+  });
+  return;
+});

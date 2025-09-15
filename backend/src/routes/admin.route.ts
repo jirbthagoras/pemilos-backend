@@ -12,6 +12,7 @@ import { deleteResetVote } from "../dtos/vote.dto";
 import { userGetAll } from "../services/user.service";
 import { getAllJSDocTags } from "typescript";
 import { toggleAllowVote } from "../controllers/setting.controller";
+import { isAdmin, isUser } from "../controllers/auth.controller";
 
 const router = Router()
 
@@ -28,5 +29,7 @@ router.get("/user", validateDTO(getUser), getAllUser)
 router.get("/user/:id", getUserById)
 router.get("/count", countVoter)
 router.put("/vote/toggle", toggleAllowVote)
+router.put("/check/user", isUser)
+router.put("/check/admin", isAdmin)
 
 export default router

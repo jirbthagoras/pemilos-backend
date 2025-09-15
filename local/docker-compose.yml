@@ -1,0 +1,55 @@
+services:
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: ./producer/Dockerfile.producer
+  #   ports:
+  #     - "5000:5000"
+  #   environment:
+  #     - APP_PORT=${APP_PORT}
+  #     - REDIS_USERNAME=${REDIS_USERNAME}
+  #     - REDIS_PASSWORD=${REDIS_PASSWORD}
+  #     - REDIS_HOST=${REDIS_HOST}
+  #     - REDIS_PORT=${REDIS_PORT}
+  #     - MONGODB_ROOT_USER=${MONGODB_ROOT_USER}
+  #     - MONGODB_ROOT_PASSWORD=${MONGODB_ROOT_PASSWORD}
+  #     - MONGODB_HOST=${MONGODB_HOST}
+  #     - MONGODB_PORT=${MONGODB_PORT}
+  #     - MONGODB_DATABASE=${MONGODB_DATABASE}
+  #     - JWT_KEY=${JWT_KEY}
+  #   env_file:
+  #     - .env
+  #     - pemilos_network
+
+  local-redis-pemilos:
+    image: redis:7-alpine
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    ports:
+      - "6379:6379"
+    # networks:
+    #   - pemilos_network
+
+  local-mongo-pemilos:
+    image: bitnami/mongodb
+    volumes:
+      - pemilos_mongo_local:/bitnami/mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGODB_ROOT_USER=${MONGODB_ROOT_USER}
+      - MONGODB_ROOT_PASSWORD=${MONGODB_ROOT_PASSWORD}
+      - MONGODB_DATABASE=${MONGODB_DATABASE}
+      - MONGODB_PORT_NUMBER=${MONGODB_PORT}
+    env_file:
+      - .env
+    # networks:
+    #   - pemilos_network
+
+# networks:
+#   pemilos_network:
+
+volumes:
+  pemilos_mongo_local:

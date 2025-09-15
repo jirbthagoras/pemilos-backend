@@ -29,10 +29,10 @@ export const userGetAll = async (
      try {
           // make a vars for pagination.
           const skip = (page: number) => {
-               return --page * 10
+               return --page * 100
           }
           // limits the user quantities to 10
-          const limit = 10
+          const limit = 100;
 
           // make a query class so that class field can dynamically defined or not
           const query: any = {

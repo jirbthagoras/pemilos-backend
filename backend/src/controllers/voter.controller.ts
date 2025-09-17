@@ -28,6 +28,7 @@ export const uploadVoterFromCsv = asyncHandler(async (req, res) => {
     fs.createReadStream(filePath)
       .pipe(csv())
       .on("data", (data) => {
+        console.log(data)
         voters.push({
           name: data.NAME,
           username: data.USERNAME,
@@ -38,6 +39,7 @@ export const uploadVoterFromCsv = asyncHandler(async (req, res) => {
       })
       .on("end", resolve)
       .on("error", reject);
+    
   });
 
   await voterSaveMany(voters);

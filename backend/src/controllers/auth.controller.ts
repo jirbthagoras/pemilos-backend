@@ -39,18 +39,9 @@ export const login = asyncHandler(async (req, res) => {
   // notice that i divide cookieAge by 1000, to convert it from miliseconds to seconds
   const token = generateToken(user._id.toString(), user.role, cookieAge / 1000);
 
-  // Then create an httpOnly cookie that contains the token
-  res.cookie(cookieName, token, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "strict",
-    path: "/api/v1",
-    maxAge: cookieAge,
-  });
-
   res.status(200).json({
     status: "sucess",
-    message: "login success",
+    token: token,
   });
 
   return;

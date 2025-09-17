@@ -50,7 +50,7 @@ export const userGetAll = async (
 
           const users = await User.find()
           .where(query)
-          .select("name class username _id isVoted")
+          .select("name class username _id isVoted password")
           .skip(skip(req.page)).limit(limit).lean()
           return users
      } catch (err) {

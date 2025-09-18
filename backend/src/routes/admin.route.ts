@@ -9,16 +9,25 @@ import { createUser, getAllUser, getUserById } from "../controllers/user.control
 import { postCandidateCreate } from "../dtos/candidate.dto";
 import { createCandidate } from "../controllers/candidate.controller";
 import { deleteResetVote } from "../dtos/vote.dto";
-import { userGetAll } from "../services/user.service";
-import { getAllJSDocTags } from "typescript";
-import { toggleAllowVote } from "../controllers/setting.controller";
+
+import { getVoteStatus, toggleAllowVote } from "../controllers/setting.controller";
 import { isAdmin, isUser } from "../controllers/auth.controller";
 
 const router = Router()
 
-const upload = multer({
-  dest: path.resolve(__dirname, "..", "..", "uploads")
-})
+const node_env = process.env.NODE_ENV
+
+let upload: multer.Multer
+
+if (node_env == "dev") {
+    upload = multer({
+      dest: path.resolve(__dirname, "..", "..", "uploads")
+    })
+} else {
+  upload = multer({
+    dest: "/app/uploads",
+  });
+}
 
 // router.use(adminMiddleware)
 router.post("/upload-csv", upload.single('file'), uploadVoterFromCsv)
@@ -28,7 +37,8 @@ router.put("/reset", validateDTO(deleteResetVote), resetVote)
 router.get("/user", validateDTO(getUser), getAllUser)
 router.get("/user/:id", getUserById)
 router.get("/count", countVoter)
-router.put("/vote/toggle", toggleAllowVote)
+router.put("/vote/status", toggleAllowVote)
+router.get("/vote/status", getVoteStatus)
 router.put("/check/user", isUser)
 router.put("/check/admin", isAdmin)
 

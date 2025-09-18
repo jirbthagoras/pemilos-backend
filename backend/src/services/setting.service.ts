@@ -19,3 +19,15 @@ export const settingToggleAllowVote = async () => {
           throw err
      }
 }
+
+export const getVoteSettingStatus = async () => {
+     try {
+          const redis = getRedisClient()
+          const rawData = await redis.hget("setting", "isVotingAllowed")
+          const isVotingAllowed = rawData === "true"
+
+          return isVotingAllowed
+     } catch (err) {
+          throw err
+     }
+}

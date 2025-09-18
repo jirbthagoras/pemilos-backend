@@ -1,5 +1,6 @@
+import { stat, statSync } from "fs";
 import { asyncHandler } from "../middlewares/async_handler.middleware";
-import { settingToggleAllowVote } from "../services/setting.service";
+import { getVoteSettingStatus, settingToggleAllowVote } from "../services/setting.service";
 
 export const toggleAllowVote = asyncHandler(async (req, res) => {
      // calls the service immediately
@@ -8,5 +9,16 @@ export const toggleAllowVote = asyncHandler(async (req, res) => {
      res.status(200).json({
           status: "success",
           message: "successfully toggled the setting"
+     })
+})
+
+export const getVoteStatus = asyncHandler(async (req, res) => {
+     const status = await getVoteSettingStatus()
+
+     res.status(200).json({
+          status: "success",
+          data: {
+               vote_status: status,
+          }
      })
 })

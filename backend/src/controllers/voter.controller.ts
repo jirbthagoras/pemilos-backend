@@ -18,11 +18,15 @@ import { getPayload } from "../utils/jwt.util";
 export const uploadVoterFromCsv = asyncHandler(async (req, res) => {
   const voters: Voter[] = [];
 
+  logger.info(req.file);
+
   if (!req.file) {
     throw createError("failed", "no file attached", 400);
   }
 
   const filePath = path.resolve(req.file.path);
+
+  logger.info(filePath);
 
   await new Promise<void>((resolve, reject) => {
     fs.createReadStream(filePath)

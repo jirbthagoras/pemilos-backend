@@ -18,6 +18,8 @@ dotenv.config({ path: path.resolve(__dirname, "../../.env.dev") });
 const app = express();
 const port = String(process.env.APP_PORT || "3000");
 
+console.log(port)
+
 app.use(cors({
      // origin: "http://localhost:5174",
      // credentials: true

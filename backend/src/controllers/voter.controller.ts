@@ -70,9 +70,9 @@ export const exportTokenizedVoterFromCSV = asyncHandler(async (req, res) => {
       .pipe(csv())
       .on("data", (data) => {
         voters.push({
-          name: data.NAME,
+          name: data.NAMA,
           username: data.USERNAME,
-          class: data.CLASS,
+          class: data.KELAS,
           password: data.TOKEN,
           isVoted: false,
         });

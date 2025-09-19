@@ -6,14 +6,21 @@ let redis: Redis | null = null;
 export const getRedisClient = () => {
 
   if (!redis) {
-    const USERNAME = process.env.REDIS_USERNAME;
-    const PASSWORD = process.env.REDIS_PASSWORD;
-    const PORT = process.env.REDIS_PORT;
-    const HOST = process.env.REDIS_HOST;
+    const USERNAME = process.env.REDIS_USERNAME ?? "";
+    const PASSWORD = process.env.REDIS_PASSWORD ?? "";
+    const PORT = process.env.REDIS_PORT ?? "";
+    const HOST = process.env.REDIS_HOST ?? "";
 
-    const url = `redis://${USERNAME}:${PASSWORD}@${HOST}:${PORT}`;
+    // const url = `redis://${USERNAME}:${PASSWORD}@${HOST}:${PORT}`;
     
-    redis = new Redis(url)
+    redis = new Redis(
+      {
+        host: HOST,
+        port: parseInt(PORT),
+        password: PASSWORD,
+        username: USERNAME
+      }  
+    )
     logger.info("Connected to redis")
   }
 

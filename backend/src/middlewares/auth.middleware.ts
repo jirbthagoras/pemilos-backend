@@ -8,7 +8,6 @@ import jwt from "jsonwebtoken";
 export const authMiddleware: MiddlewareHandler = (req, res, next) => {
     const token: string | undefined = req.get("authorization")
 
-    console.log(token)
     if (!token) {
         throw createError(
             "unauthorized",

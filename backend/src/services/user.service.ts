@@ -32,7 +32,7 @@ export const userGetAll = async (
                return --page * 100
           }
           // limits the user quantities to 10
-          const limit = 100;
+          const limit = 40;
 
           // make a query class so that class field can dynamically defined or not
           const query: any = {

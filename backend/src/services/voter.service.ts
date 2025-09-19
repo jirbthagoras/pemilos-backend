@@ -26,7 +26,8 @@ export const voterSaveVote = async (req: PostInsertVote, userId: string) => {
   // This lock is only exclusive to process that contains the same userId
   const lockName = `user:vote:${userId}`;
   // Acquire lock, exclusive process starts here.
-  let lock = await getRedlock().acquire([lockName], 3000);
+  const redlock = await getRedlock()
+  let lock = await redlock.acquire([lockName], 10000)
   try {
     // Checks the setting, is voting allowed or nah
     const rawData = await getRedisClient().hget("setting", "isVotingAllowed");
@@ -108,11 +109,12 @@ export const voterSaveVote = async (req: PostInsertVote, userId: string) => {
     // Debouncing algorithm allows a specific function to be called after a period of silence.
     // Makes it more suitable for this condition.
     voterPushLiveCount();
+    await lock.redlock.release(lock)
   } catch (err) {
     throw err;
   } finally {
     // Release the lock
-    await lock.release();
+    // await lock.redlock.release(lock);
   }
 };
 
@@ -195,7 +197,7 @@ export const voterResetVote = async (username: string) => {
       throw createError("failed", "user with such credentials not found", 401);
     }
 
-    await Vote.deleteOne({
+    await Vote.deleteMany({
       user: user._id,
     });
   } catch (err) {

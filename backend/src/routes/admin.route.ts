@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import multer from "multer";
-import { countVoter, resetVote, uploadVoterFromCsv } from "../controllers/voter.controller";
+import { countVoter, exportTokenizedVoterFromCSV, resetVote, uploadVoterFromCsv } from "../controllers/voter.controller";
 import path from "path";
 import { adminMiddleware } from "../middlewares/admin.middleware";
 import { validateDTO } from "../middlewares/validate.middleware";
@@ -15,22 +15,17 @@ import { isAdmin, isUser } from "../controllers/auth.controller";
 
 const router = Router()
 
-const node_env = process.env.NODE_ENV
+// const node_env = process.env.NODE_ENV || "dev"
 
 let upload: multer.Multer
 
-if (node_env == "dev") {
     upload = multer({
       dest: path.resolve(__dirname, "..", "..", "uploads")
     })
-} else {
-  upload = multer({
-    dest: "/app/uploads",
-  });
-}
 
 // router.use(adminMiddleware)
-router.post("/upload-csv", upload.single('file'), uploadVoterFromCsv)
+router.post("/upload/csv", upload.single('file'), uploadVoterFromCsv)
+router.post("/upload/csv/token", upload.single('file'), exportTokenizedVoterFromCSV)
 router.post("/user", validateDTO(postUserCreate), createUser)
 router.post("/candidate", validateDTO(postCandidateCreate), createCandidate)
 router.put("/reset", validateDTO(deleteResetVote), resetVote)

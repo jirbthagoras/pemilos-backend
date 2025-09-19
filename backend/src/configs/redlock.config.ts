@@ -1,6 +1,6 @@
 import Redlock from "redlock";
-import { getRedisClient } from "./redis.config";
 import { logger } from "../utils/logger.util";
+import { getRedisClient } from "./redis.config";
 
 let redlock: Redlock | null = null;
 

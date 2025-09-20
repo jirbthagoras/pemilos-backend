@@ -29,21 +29,23 @@ import { isAdmin, isUser } from "../controllers/auth.controller";
 
 const router = Router();
 
-let upload: multer.Multer;
+function getUpload(): multer.Multer {
+  const nodeEnv = process.env.NODE_ENV ?? "dev"
+  
+  if (nodeEnv == "dev") {
+    return multer({
+      dest: path.resolve(__dirname, "..", "..", "uploads"),
+    });
+  } else {
+    return multer({
+      dest: path.resolve("/app/uploads"),
+    });
+  }
+}
 
-upload = multer({
-  dest: path.resolve(__dirname, "..", "..", "uploads"),
-});
-
-
-// prod
-// upload = multer({
-//   dest: "/app/uploads"
-// });
-
-// router.use(adminMiddleware)
-router.post("/upload/csv", upload.single("file"), uploadVoterFromCsv);
-router.post("/upload/csv/token", upload.single("file"), exportTokenizedVoterFromCSV);
+router.use(adminMiddleware)
+router.post("/upload/csv", getUpload().single('file'), uploadVoterFromCsv);
+router.post("/upload/csv/token", getUpload().single('file'), exportTokenizedVoterFromCSV);
 router.post("/user", validateDTO(postUserCreate), createUser);
 router.post("/candidate", validateDTO(postCandidateCreate), createCandidate);
 router.delete("/candidate/:id", deleteCandidate)

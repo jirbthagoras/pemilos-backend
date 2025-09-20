@@ -22,104 +22,60 @@ export const voterSaveMany = async (voters: Voter[]) => {
 };
 
 export const voterSaveVote = async (req: PostInsertVote, userId: string) => {
-  // Acquire a lock first, to make sure if the process is mutex
-  // This lock is only exclusive to process that contains the same userId
+  const redlock = getRedlock();
   const lockName = `user:vote:${userId}`;
-  // Acquire lock, exclusive process starts here.
-  const redlock = await getRedlock()
-  let lock = await redlock.acquire([lockName], 10000)
+  let lock: any;
+
   try {
-    // Checks the setting, is voting allowed or nah
+    // Acquire lock
+    lock = await redlock.acquire([lockName], 10000);
+
     const rawData = await getRedisClient().hget("setting", "isVotingAllowed");
-    const isVotingAllowed = rawData === "true";
-
-    if (!isVotingAllowed) {
-      throw createError("failed", "vote not allowed", 400);
+    if (rawData !== "true") {
+      throw createError("failed", "vote not allowed", 401);
     }
 
-
-    // Checks if the id in the payload is valid
-
-    const osis = await Candidate.findOne({
-      _id: req.osis,
-      label: "osis",
-    });
-
-    const mpk = await Candidate.findOne({
-      _id: req.mpk,
-      label: "mpk",
-    });
-
+    const [osis, mpk] = await Promise.all([
+      Candidate.findOne({ _id: req.osis, label: "osis" }),
+      Candidate.findOne({ _id: req.mpk, label: "mpk" }),
+    ]);
     if (!osis || !mpk) {
-      throw createError("failed", "candidate chosen is not valid", 401);
+      throw createError("failed", "candidate chosen is not valid", 400);
     }
 
-    // Checks if the user exists just to make sure, and yeah defensive coding buddy.
     const user = await User.findById(userId);
     if (!user) {
-      throw createError("failed", "user with such id not found", 401);
+      throw createError("failed", "user with such id not found", 400);
+    }
+    if (user.isVoted || (await Vote.findOne({ user: userId }))) {
+      throw createError("failed", "user already voted", 400);
+    }
+    if (user.role === "admin") {
+      throw createError("failed", "bro u're literally admin, why u vote", 400);
     }
 
-    fileLogger.info(`${user.name} voted ${osis.name} - ${mpk.name}`)
-
-    // Checks if the user already voted
-
-    const vote = await Vote.findOne({
-      user: userId,
-    });
-
-    if (user.isVoted || vote) {
-      throw createError("failed", "user already voted", 401);
-    }
-
-    // Checks if the user is an admin
-    if (user.role == "admin") {
-      throw createError("failed", "bro u're literally admin, why u vote", 401);
-    }
-
-    // Insert the vote
-    (await Vote.insertMany(
+    await Vote.insertMany(
       [
-        {
-          label: "osis",
-          user: userId,
-          candidate: req.osis,
-        },
-        {
-          label: "mpk",
-          user: userId,
-          candidate: req.mpk,
-        },
+        { label: "osis", user: userId, candidate: req.osis },
+        { label: "mpk", user: userId, candidate: req.mpk },
       ],
-      {
-        ordered: true,
-      },
-    ),
-      // make the isVoted = true
-      // TODO: test this
-      await User.findOneAndUpdate(
-        {
-          _id: userId,
-        },
-        {
-          $set: {
-            isVoted: true,
-          },
-        },
-      ));
+      { ordered: true }
+    );
+    await User.findByIdAndUpdate(userId, { $set: { isVoted: true } });
 
-    // push livecount, started the debouncing algorithm w/lodash.
-    // Debouncing algorithm allows a specific function to be called after a period of silence.
-    // Makes it more suitable for this condition.
     voterPushLiveCount();
-    await lock.redlock.release(lock)
-  } catch (err) {
-    throw err;
+    fileLogger.info(`${user.name} voted ${osis.name} - ${mpk.name}`);
   } finally {
-    // Release the lock
-    // await lock.redlock.release(lock);
+    if (lock) {
+      try {
+        await lock.release();
+      } catch (err) {
+        fileLogger.error("Failed to release lock", err);
+      }
+    }
   }
 };
+
 
 export const voterGetResult = async (label: string) => {
   try {

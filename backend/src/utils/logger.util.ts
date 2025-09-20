@@ -6,7 +6,7 @@ import fs from "fs";
 export const logger = require("pino")()
 
 // Ensure logs directory exists
-const logDir = path.join(__dirname, "../logs");
+const logDir = path.join(__dirname, "../../logs");
 if (!fs.existsSync(logDir)) {
   fs.mkdirSync(logDir, { recursive: true });
 }

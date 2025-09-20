@@ -20,7 +20,7 @@ export const errorHandler = (err: AppError, _: Request, res: Response, __: NextF
         message: "internal server error",
         error: err
     })
-    logger.error(`internal server error, message: internal server error`);
+    logger.error(`internal server error, message: internal server error ${err}`);
     return
 
 }

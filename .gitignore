@@ -6,3 +6,4 @@ redis.conf
 mongodb_data/
 pemilos-local/
 .idea
+**/logs/

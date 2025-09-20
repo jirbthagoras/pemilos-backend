@@ -7,6 +7,7 @@ import { generatePassword } from "../utils/auth.util";
 import { logger } from "../utils/logger.util";
 import {
   voterCount,
+  voterGetResult,
   voterResetVote,
   voterSaveMany,
   voterSaveVote,
@@ -95,7 +96,6 @@ export const vote = asyncHandler(async (req, res) => {
   // Parse the payload
   const { osis, mpk } = req.body;
 
-  // get the userid from httpOnly cookie
   const { id } = getPayload(req);
 
   // Calls the service
@@ -131,6 +131,8 @@ export const countVoter = asyncHandler(async (req, res) => {
   // Calls the service
   const result = await voterCount();
 
+
+
   res.status(200).json({
     status: "success",
     message: "successfully get the voter count",
@@ -138,3 +140,14 @@ export const countVoter = asyncHandler(async (req, res) => {
   });
   return;
 });
+
+export const getLiveCount = asyncHandler(async (req, res) => {
+  const result = {
+    osis: await voterGetResult("osis"),
+    mpk: await voterGetResult("mpk"),
+  };
+
+  res.status(200).json({
+    "data": result,
+  })
+})

@@ -1,6 +1,6 @@
 import { GetUser, PostUserCreate } from "../dtos/user.dto";
 import { asyncHandler } from "../middlewares/async_handler.middleware";
-import { userCreate, userGetAll, userGetById } from "../services/user.service";
+import { deleteUserById, userCreate, userGetAll, userGetById } from "../services/user.service";
 import { logger } from "../utils/logger.util";
 
 export const createUser = asyncHandler(async (req, res) => {
@@ -33,7 +33,6 @@ export const createUser = asyncHandler(async (req, res) => {
 
 export const getAllUser = asyncHandler(async (req, res) => {
      // get the payload first as always
-     logger.info(req.body)
      const {
           page = 1,
           isVoted = false,
@@ -68,4 +67,15 @@ export const getUserById = asyncHandler(async (req, res) => {
           data: user
      })
      return
+})
+
+export const deleteUser = asyncHandler(async (req, res) => {
+     const { id } = req.params
+
+     await deleteUserById(id)
+
+     return res.status(200).json({
+          status: "success",
+          message: "user successfully delete "
+     })
 })

@@ -8,7 +8,7 @@ import { getRedisClient } from "../configs/redis.config";
 import debounce from "lodash/debounce";
 import { getPusherClient } from "../configs/pusher.config";
 import { Candidate } from "../models/candidate.model";
-import { logger } from "../utils/logger.util";
+import { fileLogger, logger } from "../utils/logger.util";
 
 // receive one or more user, and then input it to database.
 export const voterSaveMany = async (voters: Voter[]) => {
@@ -37,6 +37,7 @@ export const voterSaveVote = async (req: PostInsertVote, userId: string) => {
       throw createError("failed", "vote not allowed", 400);
     }
 
+
     // Checks if the id in the payload is valid
 
     const osis = await Candidate.findOne({
@@ -58,6 +59,8 @@ export const voterSaveVote = async (req: PostInsertVote, userId: string) => {
     if (!user) {
       throw createError("failed", "user with such id not found", 401);
     }
+
+    fileLogger.info(`${user.name} voted ${osis.name} - ${mpk.name}`)
 
     // Checks if the user already voted
 

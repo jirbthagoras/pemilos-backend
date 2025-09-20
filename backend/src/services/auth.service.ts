@@ -9,7 +9,7 @@ export const authLogin = async (req: PostAuthLogin) => {
   }).exec();
 
   if (!user) {
-    throw createError("failed", "user with such credential not found", 401);
+    throw createError("failed", "user with such credential not found", 400);
   }
 
   if (user.isVoted) {
@@ -22,7 +22,7 @@ export const authLogin = async (req: PostAuthLogin) => {
 
   // checks the password or token or, u said lah
   if (req.password != user.password) {
-    throw createError("failed", "password is not valid", 401);
+    throw createError("failed", "password is not valid", 400);
   }
 
   return user;

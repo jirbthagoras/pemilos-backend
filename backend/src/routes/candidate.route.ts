@@ -5,8 +5,7 @@ import { rateLimitMiddleware } from "../middlewares/rate-limit.middleware";
 
 const router = Router()
 
-router.use(authMiddleware)
-router.use(rateLimitMiddleware)
+// router.use(authMiddleware)
 router.get("/", getCandidate)
 
 export default router

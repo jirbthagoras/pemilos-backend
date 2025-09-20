@@ -12,16 +12,6 @@ export const login = asyncHandler(async (req, res) => {
   // parse user credentials
   const { username, password } = req.body;
 
-  // checks if the user is logged in currently
-  // const session: string | undefined = req.cookies.pemilostoken;
-  // if (!session) {
-  //      throw createError(
-  //           "failed",
-  //           "you're already logged in",
-  //           401
-  //      );
-  // }
-
   // And then here we calls the service
   const user = await authLogin({
     username,
@@ -43,25 +33,6 @@ export const login = asyncHandler(async (req, res) => {
     status: "sucess",
     token: token,
   });
-
-  return;
-});
-
-export const logout = asyncHandler(async (req, res) => {
-  // just simply clear the cookie i guess
-  res.clearCookie(cookieName, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "strict",
-    path: "/api/v1",
-  });
-
-  res.status(200).json({
-    status: "success",
-    message: "successfully logged out",
-  });
-
-  res.end();
 
   return;
 });

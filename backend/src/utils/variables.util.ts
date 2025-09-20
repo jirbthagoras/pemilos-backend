@@ -38,6 +38,6 @@ export const CLASS: string[] = [
      "12 TJKT 1",
      "12 TJKT 2",
      "STAFF",
-     "TEACHER",
+     "GURU",
      "ADMIN"
 ]

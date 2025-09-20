@@ -37,11 +37,14 @@ export const userGetAll = async (
           // make a query class so that class field can dynamically defined or not
           const query: any = {
                role: req.role,
-               isVoted: req.isVoted,
                // Do not give any sweats on ts, it just a basic LIKE keyword
                name: {
                     $regex: req.name, $options: "i"
                }
+          }
+
+          if (req.isVoted) {
+               query.isVoted = true
           }
 
           if (req.kelas) {
@@ -50,7 +53,7 @@ export const userGetAll = async (
 
           const users = await User.find()
           .where(query)
-          .select("name class username _id isVoted password")
+          .select("name class username _id isVoted password role")
           .skip(skip(req.page)).limit(limit).lean()
           return users
      } catch (err) {
@@ -62,6 +65,16 @@ export const userGetById = async (id: string) => {
      try {
           const user = await User.findById(id).lean()
           return user
+     } catch (err) {
+          throw err
+     }
+}
+
+export const deleteUserById = async (id: string) => {
+     try {
+          await User.deleteOne({
+               _id: id
+          })
      } catch (err) {
           throw err
      }

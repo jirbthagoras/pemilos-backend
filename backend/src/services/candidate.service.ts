@@ -45,3 +45,13 @@ export const candidateGet = async () => {
           throw err
      }
 }
+
+export const deleteCandidateById = async (id: string) => {
+     try {
+          await Candidate.deleteOne({
+               _id: id
+          })
+     } catch (err) {
+          throw err
+     }
+}

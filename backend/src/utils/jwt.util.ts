@@ -24,7 +24,7 @@ export const verifyToken = (token: string) => {
 }
 
 export const getPayload = (req: Request) => {
-     const token: string | undefined = req.get("authorization")
+     const token: string | undefined = req.get("Authorization")
      if (!token) {
           throw createError(
                "unauthorized",

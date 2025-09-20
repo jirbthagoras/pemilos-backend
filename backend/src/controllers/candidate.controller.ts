@@ -1,6 +1,6 @@
 import { PostCandidateCreate } from "../dtos/candidate.dto";
 import { asyncHandler } from "../middlewares/async_handler.middleware";
-import { candidateGet, candidateInsert } from "../services/candidate.service";
+import { candidateGet, candidateInsert, deleteCandidateById } from "../services/candidate.service";
 
 export const createCandidate = asyncHandler(async (req, res) => {
      // parse the request
@@ -34,4 +34,15 @@ export const getCandidate = asyncHandler(async (req, res) => {
           "data": candidates
      })
      return
+})
+
+export const deleteCandidate = asyncHandler(async (req, res) => {
+     const { id } = req.params
+
+     await deleteCandidateById(id)
+
+     return res.status(200).json({
+          "status": "success",
+          "message": "delete candidate success"
+     })
 })

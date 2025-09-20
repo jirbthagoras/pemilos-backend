@@ -6,7 +6,7 @@ import { logger } from '../utils/logger.util';
 import jwt from "jsonwebtoken";
 
 export const authMiddleware: MiddlewareHandler = (req, res, next) => {
-    const token: string | undefined = req.get("authorization")
+    const token: string | undefined = req.get("Authorization") || req.get("authorization")
 
     if (!token) {
         throw createError(
@@ -21,7 +21,7 @@ export const authMiddleware: MiddlewareHandler = (req, res, next) => {
             "unauthorized",
             "invalid Token",
             401
-        );
+        )
     }
 
     next()

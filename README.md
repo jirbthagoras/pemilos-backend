@@ -26,4 +26,5 @@ So here are some several components that will be used in this project:
 - Work with the frontend.
 
 # How to run i think.
-Since the frontend is in the different repo. You need to clone it
+Since the frontend is in the different repo. You need to clone it first at:
+https://github.com/algazza/pemilos-frontend

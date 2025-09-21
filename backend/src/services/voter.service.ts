@@ -128,10 +128,7 @@ export const voterGetResult = async (label: string) => {
 
 // Will be implemented later. When the pusher is ready.
 export const voterPushLiveCount = debounce(async () => {
-  const result = {
-    osis: await voterGetResult("osis"),
-    mpk: await voterGetResult("mpk"),
-  };
+  const result = ""
 
   const pusher = await getPusherClient();
 

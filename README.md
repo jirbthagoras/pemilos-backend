@@ -16,6 +16,7 @@ So here are some several components that will be used in this project:
 - Docker compose, for infrastructure testing and management.
 - Pusher, third party websocket.
 - OTel, Grafana (not yet confirmed, but i really want to use it)
+- Winston for logging, logs can be found at: /src/logs (it automatically creates after system start)
 
 # Documentation
 
@@ -23,3 +24,6 @@ So here are some several components that will be used in this project:
 
 # ToDo
 - Work with the frontend.
+
+# How to run i think.
+Since the frontend is in the different repo. You need to clone it

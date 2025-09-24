@@ -18,7 +18,10 @@ import {
   getUserById,
 } from "../controllers/user.controller";
 import { postCandidateCreate } from "../dtos/candidate.dto";
-import { createCandidate, deleteCandidate } from "../controllers/candidate.controller";
+import {
+  createCandidate,
+  deleteCandidate,
+} from "../controllers/candidate.controller";
 import { deleteResetVote } from "../dtos/vote.dto";
 
 import {
@@ -30,8 +33,8 @@ import { isAdmin, isUser } from "../controllers/auth.controller";
 const router = Router();
 
 function getUpload(): multer.Multer {
-  const nodeEnv = process.env.NODE_ENV ?? "dev"
-  
+  const nodeEnv = process.env.NODE_ENV ?? "dev";
+
   if (nodeEnv == "dev") {
     return multer({
       dest: path.resolve(__dirname, "..", "..", "uploads"),
@@ -43,19 +46,23 @@ function getUpload(): multer.Multer {
   }
 }
 
-router.use(adminMiddleware)
-router.post("/upload/csv", getUpload().single('file'), uploadVoterFromCsv);
-router.post("/upload/csv/token", getUpload().single('file'), exportTokenizedVoterFromCSV);
+router.get("/vote/status", getVoteStatus);
+// router.use(adminMiddleware);
+router.post("/upload/csv", getUpload().single("file"), uploadVoterFromCsv);
+router.post(
+  "/upload/csv/token",
+  getUpload().single("file"),
+  exportTokenizedVoterFromCSV,
+);
 router.post("/user", validateDTO(postUserCreate), createUser);
 router.post("/candidate", validateDTO(postCandidateCreate), createCandidate);
-router.delete("/candidate/:id", deleteCandidate)
+router.delete("/candidate/:id", deleteCandidate);
 router.put("/reset", validateDTO(deleteResetVote), resetVote);
 router.get("/user", validateDTO(getUser), getAllUser);
-router.delete("/user/:id", deleteUser)
+router.delete("/user/:id", deleteUser);
 router.get("/user/:id", getUserById);
 router.get("/count", countVoter);
 router.put("/vote/status", toggleAllowVote);
-router.get("/vote/status", getVoteStatus);
 router.put("/check/user", isUser);
 router.put("/check/admin", isAdmin);
 router.get("/live/count", getLiveCount);

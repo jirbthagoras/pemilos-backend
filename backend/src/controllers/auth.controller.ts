@@ -41,25 +41,25 @@ export const isUser = asyncHandler(async (req, res) => {
   const { role } = getPayload(req);
 
   if (role != "voter") {
-    throw createError("Unauthorized", "unauthorized, you're not user", 401)
+    throw createError("Unauthorized", "unauthorized, you're not user", 401);
   }
 
   res.status(200).json({
     status: "success",
   });
-})
+});
 
 export const isAdmin = asyncHandler(async (req, res) => {
   const { role } = getPayload(req);
 
   if (role != "admin") {
-    throw createError("Unauthorized", "unauthorized, you're not admin", 401)
+    throw createError("Unauthorized", "unauthorized, you're not admin", 401);
   }
 
   res.status(200).json({
     status: "success",
   });
-})
+});
 
 // Cuz, we're using httpOnly so let's make a function that frontend will be often using
 export const checkProfile = asyncHandler(async (req, res) => {
